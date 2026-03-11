@@ -1,0 +1,22 @@
+<table>
+  <tr>
+    <th>ID</th>
+    <th>NOMBRE</th>
+    <th>PRECIO</th>
+    <th>STOCK</th>
+  </tr>
+
+  <tbody>
+    @for (product of productsResource.value() ; track product.id) {
+     <tr>
+      <td>{{product.id}}</td>
+      <td>{{product.name}}</td>
+      <td>{{product.price}}</td>
+      <td>{{product.stock}}</td>
+    </tr>
+    }
+
+
+  </tbody>
+
+</table>
