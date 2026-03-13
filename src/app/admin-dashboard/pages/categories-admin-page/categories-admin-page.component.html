@@ -1,0 +1,22 @@
+<section class="">
+  <h1 class="text-4xl text-center my-10">Lista de Categorias</h1>
+  <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Categoria</a>
+
+  <div class="flex justify-center">
+    <paginator [totalPages]="categoriesResource.value()?.totalPages" [currentPage]="categoriesResource.value()?.page" />
+  </div>
+
+
+  @if (categoriesResource.isLoading()) {
+  <div class=" flex justify-center h-50 ">
+    <span class="loading loading-dots loading-xl "></span>
+  </div>
+  } @else {
+  <categories-table [categories]="categoriesResource.value()?.content" (onDelete)="eliminarCategoria($event)"></categories-table>
+
+  }
+  <div class="flex justify-center">
+    <paginator [totalPages]="categoriesResource.value()?.totalPages" [currentPage]="categoriesResource.value()?.page" />
+  </div>
+
+</section>
