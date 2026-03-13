@@ -1,6 +1,22 @@
-<section class="border">
-  <h1 class="text-4xl text-center">Lista de Productos</h1>
+<section class="">
+  <h1 class="text-4xl text-center my-10">Lista de Productos</h1>
+  <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Producto</a>
 
-  <products-table></products-table>
+  <div class="flex justify-center">
+    <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page" />
+  </div>
+
+
+  @if (productsResource.isLoading()) {
+  <div class=" flex justify-center h-50 ">
+    <span class="loading loading-dots loading-xl "></span>
+  </div>
+  } @else {
+  <products-table [products]="productsResource.value()?.content" (onDelete)="eliminarProducto($event)"></products-table>
+
+  }
+  <div class="flex justify-center">
+    <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page" />
+  </div>
 
 </section>

@@ -1,22 +1,21 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { rxResource } from '@angular/core/rxjs-interop';
-import { ProductService } from '../../service/product.service';
-import { catchError, map, of } from 'rxjs';
+import { Component, inject, input, OnInit, output } from '@angular/core';
+
+import { Product } from '../../interfaces/product.interface';
+import { DatePipe, NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import {  ActiveTextEntityPipe } from "../../../shared/pipes/active-text-entity.pipe";
+import {ActiveStateColorPipe } from "../../../shared/pipes/active-state-color.pipe";
 @Component({
   selector: 'products-table',
   templateUrl: './products-table.component.html',
-  styleUrls: ['./products-table.component.css']
+  styleUrls: ['./products-table.component.css'],
+  imports: [DatePipe, RouterLink, NgClass,  ActiveStateColorPipe, ActiveTextEntityPipe]
 })
 export class ProductsTableComponent {
-  private service=inject(ProductService);
+ products = input.required<Product[] | undefined>();
+ onDelete=output<Product>()
 
-  productsResource = rxResource({
-    params: () =>({}),
-    stream: ()=>{
-      return this.service.findAll().pipe(
-        map(response=>response.content),
-        catchError(e=>of(console.log(e)))
-      );
-    }
-  });
+ eliminar(product:Product){
+  this.onDelete.emit(product);
+ }
 }
