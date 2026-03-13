@@ -7,7 +7,7 @@ export interface Product extends BaseEntity{
     description:string,
     price:number,
     stock:number,
-    category:Category,
-    brand:Brand,
-    images:ProductImage[]
+    category:Category|null,
+    brand:Brand|null,
+    //images:ProductImage[]
 }

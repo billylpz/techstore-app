@@ -1,6 +1,6 @@
 export interface BaseEntity{
-    id:number,
+    id:number | null,
     name:string,
     active:boolean,
-    createdAt:Date,
+    createdAt?:Date | null,
 }
