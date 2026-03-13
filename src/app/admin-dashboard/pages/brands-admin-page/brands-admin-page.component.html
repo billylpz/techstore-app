@@ -1,0 +1,22 @@
+<section class="">
+  <h1 class="text-4xl text-center my-10">Lista de Marcas</h1>
+  <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Marca</a>
+
+  <div class="flex justify-center">
+    <paginator [totalPages]="brandsResource.value()?.totalPages" [currentPage]="brandsResource.value()?.page" />
+  </div>
+
+
+  @if (brandsResource.isLoading()) {
+  <div class=" flex justify-center h-50 ">
+    <span class="loading loading-dots loading-xl "></span>
+  </div>
+  } @else {
+  <brands-table [brands]="brandsResource.value()?.content" (onDelete)="eliminarMarca($event)"></brands-table>
+
+  }
+  <div class="flex justify-center">
+    <paginator [totalPages]="brandsResource.value()?.totalPages" [currentPage]="brandsResource.value()?.page" />
+  </div>
+
+</section>
