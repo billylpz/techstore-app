@@ -1,0 +1,9 @@
+<div class="join">
+  <button class="join-item btn" [routerLink]="[]" [queryParams]="{page:1}">««</button>
+  <button class="join-item btn" [routerLink]="[]" [queryParams]="{page:currentPage()!}"
+    [disabled]="currentPage()==0">«</button>
+  <button class="join-item btn">{{currentPage()!+1}} de {{totalPages()}}</button>
+  <button class="join-item btn" [routerLink]="[]" [queryParams]="{page:currentPage()!+2}"
+    [disabled]="currentPage()!+1==totalPages()">»</button>
+  <button class="join-item btn" [routerLink]="[]" [queryParams]="{page:totalPages()}">»»</button>
+</div>
