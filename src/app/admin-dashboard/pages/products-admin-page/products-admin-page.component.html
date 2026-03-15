@@ -1,22 +1,45 @@
-<section class="">
+<section class="flex flex-col h-screen ">
   <h1 class="text-4xl text-center my-10">Lista de Productos</h1>
-  <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Producto</a>
 
+
+  @if (productsResource.value()?.totalElements!>0) {
   <div class="flex justify-center">
     <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page" />
   </div>
+  }
 
+
+  <div class="flex gap-3 mt-10 ">
+    <div class="flex justify-start w-1/4">
+      <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Producto</a>
+    </div>
+
+    <div class="flex justify-center items-center gap-3  ">
+      <label for="search-by" class="text-gray-400">Buscar por nombre:</label>
+      <input type="text" id="search-by" class="border rounded-sm px-2" autofocus [formControl]="searchByName">
+    </div>
+  </div>
 
   @if (productsResource.isLoading()) {
   <div class=" flex justify-center h-50 ">
     <span class="loading loading-dots loading-xl "></span>
   </div>
-  } @else {
-  <products-table [products]="productsResource.value()?.content" (onDelete)="eliminarProducto($event)"></products-table>
-
+  } @else if (productsResource.value()?.totalElements==0) {
+  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontró los productos con nombre
+    '{{searchResult()}}'
+  </p>
   }
+  @else {
+  <div class="flex-1">
+    <products-table [products]="productsResource.value()?.content"
+      (onDelete)="eliminarProducto($event)"></products-table>
+  </div>
+  }
+
+  @if (productsResource.value()?.totalElements!>0) {
   <div class="flex justify-center">
     <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page" />
   </div>
+  }
 
 </section>
