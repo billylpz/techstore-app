@@ -16,14 +16,14 @@ import { FormErrorLabelComponent } from "../../../shared/components/form-error-l
   imports: [ReactiveFormsModule, FormErrorLabelComponent]
 })
 export class CategoryAdminFormPageComponent {
-fb = inject(FormBuilder);
+  fb = inject(FormBuilder);
   route = inject(ActivatedRoute);
   router = inject(Router);
   service = inject(CategoryService)
 
   effects = effect(() => {
     const category = this.categoryResource.value();
-    if(category){
+    if (category) {
       this.myForm.patchValue(category)
     }
   });
@@ -50,7 +50,7 @@ fb = inject(FormBuilder);
   });
 
   myForm = this.fb.group({
-    id: this.fb.control<number|null>(null),
+    id: this.fb.control<number | null>(null),
     name: ['', [Validators.required, Validators.minLength(2)]]
   })
 
@@ -75,8 +75,10 @@ fb = inject(FormBuilder);
 
         this.router.navigate(['/admin/categories']);
       },
-      error: (e) => console.log(e)
-    })
+      error: (message => {
+        Swal.fire("Error", message, "error")
+      })
+    });
   }
 
 }

@@ -94,14 +94,19 @@ export class ProductAdminFormPageComponent {
     const product = this.myForm.value as Product
     const request = (product.id != null && product.id > 0) ? this.productService.update(product) : this.productService.save(product);
 
-    request.subscribe(response => {
-      Swal.fire({
-        title: "Producto guardado!",
-        text: `${response.name}`,
-        icon: "success"
-      });
+    request.subscribe({
+      next: (response) => {
+        Swal.fire({
+          title: "Producto guardado!",
+          text: `${response.name}`,
+          icon: "success"
+        });
+        this.router.navigate(['products']);
+      },
+      error:(message=>{
+        Swal.fire("Error",message,"error")
+      })
 
-      this.router.navigate(['products']);
     });
 
   }

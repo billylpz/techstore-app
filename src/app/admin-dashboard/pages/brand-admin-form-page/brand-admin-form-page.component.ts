@@ -22,7 +22,7 @@ export class BrandAdminFormPageComponent {
 
   effects = effect(() => {
     const brand = this.brandResource.value();
-    if(brand){
+    if (brand) {
       this.myForm.patchValue(brand)
     }
   });
@@ -49,7 +49,7 @@ export class BrandAdminFormPageComponent {
   });
 
   myForm = this.fb.group({
-    id: this.fb.control<number|null>(null),
+    id: this.fb.control<number | null>(null),
     name: ['', [Validators.required, Validators.minLength(2)]]
   })
 
@@ -74,8 +74,10 @@ export class BrandAdminFormPageComponent {
 
         this.router.navigate(['/admin/brands']);
       },
-      error: (e) => console.log(e)
-    })
+      error: (message => {
+        Swal.fire("Error", message, "error")
+      })
+    });
   }
 
 
