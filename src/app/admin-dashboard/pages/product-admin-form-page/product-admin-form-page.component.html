@@ -57,7 +57,27 @@
       </div>
     </div>
 
- 
+    <div class="border p-3 flex flex-col gap-3 rounded-sm">
+      <label for="upload-photos" class="text-red-400 cursor-pointer">Subir Fotos</label>
+      <input id="upload-photos" type="file" multiple (change)="selectFiles($event)" accept="image/*"
+        class="file-input file-input-bordered w-full max-w-xs">
+    </div>
+
+
+    <div class="border rounded-sm flex flex-col p-5 gap-3">
+
+      <label for="" class="text-red-400">Fotos</label>
+
+      <div class=" grid grid-cols-4 ">
+        @for (urlPhoto of resizedImages() ; track urlPhoto) {
+        <img [src]="urlPhoto" alt="urlPhoto" class="size-30 h-40">
+        }@empty{
+        <p class="text-sm  col-span-4">Este producto aun no tiene fotos</p>
+        }
+      </div>
+    </div>
+
+
 
     <div class="pt-4">
       <button type="submit" [disabled]="myForm.invalid"

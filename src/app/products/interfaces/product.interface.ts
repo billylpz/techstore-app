@@ -9,5 +9,5 @@ export interface Product extends BaseEntity{
     stock:number,
     category:Category|null,
     brand:Brand|null,
-    //images:ProductImage[]
+    images:ProductImage[]
 }

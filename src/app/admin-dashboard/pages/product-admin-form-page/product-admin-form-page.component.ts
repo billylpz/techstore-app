@@ -1,6 +1,6 @@
 import { Category } from './../../../categories/interfaces/category.interface';
 import { ProductService } from './../../../products/service/product.service';
-import { Component, effect, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../../categories/service/category.service';
 import { BrandService } from '../../../brands/service/brand.service';
@@ -13,6 +13,7 @@ import Swal from 'sweetalert2'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Brand } from '../../../brands/interfaces/brand.interface';
 import { BaseEntity } from '../../../shared/interfaces/base-entity.interface';
+import { ImageUtils } from '../../../shared/utils/image-utils';
 @Component({
   selector: 'app-product-admin-form-page',
   templateUrl: './product-admin-form-page.component.html',
@@ -26,13 +27,18 @@ export class ProductAdminFormPageComponent {
   private productService = inject(ProductService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private selectedFiles = signal<File[]>([]);
+  imageUtils = ImageUtils;
 
   effects = effect(() => {
     const prod = this.productResource.value();
-    if (prod != null) { this.myForm.patchValue(prod) }
+    if (prod != null) {
+      this.myForm.patchValue(prod)
+    }
 
   });
 
+  //param id para formulario y productos nuevos
   private productId = toSignal(this.route.paramMap.pipe(map(param => {
     const idString = param.get('id')
     if (!idString) { return null }
@@ -45,6 +51,8 @@ export class ProductAdminFormPageComponent {
     return idNumeric <= 0 ? null : idNumeric;
   })), { initialValue: null })
 
+
+  //producto para el formulario
   productResource = rxResource({
     params: () => this.productId(),
     stream: ({ params: id }) => {
@@ -63,16 +71,6 @@ export class ProductAdminFormPageComponent {
   });
 
 
-  brandsResource = rxResource({
-    params: () => ({}),
-    stream: ({ }) => this.brandService.findAll({ page: 0, size: 100 }).pipe(map(response => response.content))
-  });
-
-  categoriesResource = rxResource({
-    params: () => ({}),
-    stream: ({ }) => this.categoryService.findAll({}).pipe(map(response => response.content))
-  });
-
   myForm = this.fb.group({
     id: this.fb.control<number | null>(null),
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -81,9 +79,9 @@ export class ProductAdminFormPageComponent {
     stock: [0, [Validators.required, Validators.min(1), Validators.max(10000), Validators.pattern(FormUtils.numberPattern)]],
     category: this.fb.control<Category | null>(null, Validators.required),
     brand: this.fb.control<Brand | null>(null, Validators.required),
-  })
+  });
 
-
+  //evento al enviar el formulario
   onSubmit() {
     this.myForm.markAllAsTouched();
 
@@ -92,7 +90,9 @@ export class ProductAdminFormPageComponent {
     }
 
     const product = this.myForm.value as Product
-    const request = (product.id != null && product.id > 0) ? this.productService.update(product) : this.productService.save(product);
+    const request = (product.id != null && product.id > 0) ?
+      this.productService.updateWithImages(product, this.selectedFiles())
+      : this.productService.saveWithImages(product, this.selectedFiles());
 
     request.subscribe({
       next: (response) => {
@@ -103,13 +103,52 @@ export class ProductAdminFormPageComponent {
         });
         this.router.navigate(['products']);
       },
-      error:(message=>{
-        Swal.fire("Error",message,"error")
+      error: (message => {
+        Swal.fire("Error", message, "error")
       })
 
     });
 
-  }
+  };
+
+
+  //devuelve un array de las url de las imagenes del producto
+  resizedImages = computed(() => {
+    let images = this.productResource.value()?.images.map(img => this.imageUtils.resizeImage(img.imageUrl, 300));
+    return images;
+  });
+
+
+  //evento al seleccionar imagenes en el input file
+  selectFiles(event: Event) {
+    const files = (event.target as HTMLInputElement).files;
+
+    if (files && files.length > 0) {
+      this.selectedFiles.set(Array.from(files));
+
+      //verifica en caso se haya ingresado archivos diferentes a formato imagen
+      for (const file of this.selectedFiles()) {
+        if (!file.type.includes('image')) {
+          Swal.fire("Error", "Sólo se permiten archivos con formato imagen!", "error");
+          this.selectedFiles.set([]);
+          return; // sale del método completo
+        }
+      }
+
+    }
+  };
+
+
+  brandsResource = rxResource({
+    params: () => ({}),
+    stream: ({ }) => this.brandService.findAll({ page: 0, size: 100 }).pipe(map(response => response.content))
+  });
+
+  categoriesResource = rxResource({
+    params: () => ({}),
+    stream: ({ }) => this.categoryService.findAll({}).pipe(map(response => response.content))
+  });
+
 
   compararEntities(e1: BaseEntity, e2: BaseEntity) {
     // Si AMBOS son nulos o undefined, son iguales (es la opción "Seleccionar")
