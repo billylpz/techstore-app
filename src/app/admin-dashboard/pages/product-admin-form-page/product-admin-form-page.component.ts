@@ -5,7 +5,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../../categories/service/category.service';
 import { BrandService } from '../../../brands/service/brand.service';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, map, of } from 'rxjs';
+import { catchError, delay, map, of, timeout } from 'rxjs';
 import { Product } from '../../../products/interfaces/product.interface';
 import { FormErrorLabelComponent } from '../../../shared/components/form-error-label/form-error-label.component';
 import { FormUtils } from '../../../shared/utils/form-utils';
@@ -14,11 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Brand } from '../../../brands/interfaces/brand.interface';
 import { BaseEntity } from '../../../shared/interfaces/base-entity.interface';
 import { ImageUtils } from '../../../shared/utils/image-utils';
+import { SavingOverlayComponent } from "../../../shared/components/saving-overlay/saving-overlay.component";
 @Component({
   selector: 'app-product-admin-form-page',
   templateUrl: './product-admin-form-page.component.html',
   styleUrls: ['./product-admin-form-page.component.css'],
-  imports: [ReactiveFormsModule, FormErrorLabelComponent,]
+  imports: [ReactiveFormsModule, FormErrorLabelComponent,  SavingOverlayComponent]
 })
 export class ProductAdminFormPageComponent {
   private fb = inject(FormBuilder);
@@ -28,7 +29,8 @@ export class ProductAdminFormPageComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private selectedFiles = signal<File[]>([]);
-  imageUtils = ImageUtils;
+  private imageUtils = ImageUtils;
+  isUploadingPhotos = signal<boolean>(false);
 
   effects = effect(() => {
     const prod = this.productResource.value();
@@ -91,8 +93,12 @@ export class ProductAdminFormPageComponent {
 
     const product = this.myForm.value as Product
     const request = (product.id != null && product.id > 0) ?
-      this.productService.updateWithImages(product, this.selectedFiles())
-      : this.productService.saveWithImages(product, this.selectedFiles());
+      this.productService.updateWithImages(product, this.selectedFiles()).pipe(delay(500))
+      : this.productService.saveWithImages(product, this.selectedFiles()).pipe(delay(500))
+
+    this.isUploadingPhotos.set(true);
+    document.body.classList.add("overflow-hidden")
+
 
     request.subscribe({
       next: (response) => {
@@ -101,10 +107,14 @@ export class ProductAdminFormPageComponent {
           text: `${response.name}`,
           icon: "success"
         });
+        document.body.classList.remove("overflow-hidden");
+        this.isUploadingPhotos.set(false);
         this.router.navigate(['products']);
       },
       error: (message => {
-        Swal.fire("Error", message, "error")
+        Swal.fire("Error", message, "error");
+        document.body.classList.remove("overflow-hidden");
+        this.isUploadingPhotos.set(false);
       })
 
     });
