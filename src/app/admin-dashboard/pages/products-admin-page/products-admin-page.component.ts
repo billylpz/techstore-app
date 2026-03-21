@@ -28,11 +28,10 @@ export class ProductsAdminPageComponent implements OnInit {
   ngOnInit(): void {
     this.searchByName.valueChanges.pipe(
       debounceTime(1000),
-      distinctUntilChanged(), 
-      takeUntilDestroyed(this.destroyRef) 
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef)
     ).subscribe(value => {
-      this.searchResult.set(value?.trim()!)
-      console.log(value);
+      this.searchResult.set(value?.trim() ?? '')
     })
   }
 
@@ -48,7 +47,7 @@ export class ProductsAdminPageComponent implements OnInit {
     }),
     stream: ({ params }) => {
       // Si hay texto en el buscador, llamamos al método de búsqueda
-      if (params.term) {
+      if (params.term && params.term.length>0) {
         return this.service.findAllByName({ page: params.page, term: params.term }).pipe(
           delay(500)
         );
