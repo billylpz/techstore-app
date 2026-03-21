@@ -6,11 +6,14 @@ import { BrandsAdminPageComponent } from './pages/brands-admin-page/brands-admin
 import { BrandAdminFormPageComponent } from './pages/brand-admin-form-page/brand-admin-form-page.component';
 import { CategoriesAdminPageComponent } from './pages/categories-admin-page/categories-admin-page.component';
 import { CategoryAdminFormPageComponent } from './pages/category-admin-form-page/category-admin-form-page.component';
+import { HomeAdminPageComponent } from './pages/home-admin-page/home-admin-page.component';
 
 export const routes: Routes = [
     {
         path:'', component:AdminDashboardLayoutComponent,
         children:[
+            {path:'home',component:HomeAdminPageComponent, title:'Bienvenido Admin'},
+
             {path:'products',component:ProductsAdminPageComponent, title:'Lista de Productos'},
             {path:'products/form',component:ProductAdminFormPageComponent , title:'Guardar Producto'},
             {path:'products/form/:id',component:ProductAdminFormPageComponent, title:'Guardar Producto'},
@@ -26,7 +29,7 @@ export const routes: Routes = [
             {path:'categories/form/:id',component:CategoryAdminFormPageComponent, title:'Guardar Categoria'},
 
             //default
-            {path:'**',redirectTo:'products'}
+            {path:'**',redirectTo:'home'}
         ],
         title:'Admin Dashboard'
     }
