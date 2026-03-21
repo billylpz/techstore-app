@@ -60,4 +60,11 @@ export class ProductService extends CommonService<Product> {
       catchError(e => this.handleErrorMessage(e))
     );
   }
+
+
+  deleteProductImage(publicId:string):Observable<void>{
+    return this.http.delete<void>(`${this.urlApi}/product-image`, {params:{publicId}}).pipe(
+      catchError(e=>this.handleErrorMessage(e))
+    );
+  }
 }

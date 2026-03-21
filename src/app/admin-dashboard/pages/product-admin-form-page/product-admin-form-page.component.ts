@@ -10,18 +10,22 @@ import { Product } from '../../../products/interfaces/product.interface';
 import { FormErrorLabelComponent } from '../../../shared/components/form-error-label/form-error-label.component';
 import { FormUtils } from '../../../shared/utils/form-utils';
 import Swal from 'sweetalert2'
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Brand } from '../../../brands/interfaces/brand.interface';
 import { BaseEntity } from '../../../shared/interfaces/base-entity.interface';
 import { ImageUtils } from '../../../shared/utils/image-utils';
 import { SavingOverlayComponent } from "../../../shared/components/saving-overlay/saving-overlay.component";
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ProductImage } from '../../../products/interfaces/product-image.interface';
 @Component({
   selector: 'app-product-admin-form-page',
   templateUrl: './product-admin-form-page.component.html',
   styleUrls: ['./product-admin-form-page.component.css'],
-  imports: [ReactiveFormsModule, FormErrorLabelComponent,  SavingOverlayComponent]
+  imports: [ReactiveFormsModule, FormErrorLabelComponent, SavingOverlayComponent, RouterLink, FontAwesomeModule]
 })
 export class ProductAdminFormPageComponent {
+
   private fb = inject(FormBuilder);
   private categoryService = inject(CategoryService);
   private brandService = inject(BrandService);
@@ -29,13 +33,16 @@ export class ProductAdminFormPageComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private selectedFiles = signal<File[]>([]);
-  private imageUtils = ImageUtils;
+  imageUtils = ImageUtils;
   isUploadingPhotos = signal<boolean>(false);
+  iconoBorrar = faTrashCan;
+  productImages=signal<ProductImage[]>([]);
 
   effects = effect(() => {
     const prod = this.productResource.value();
     if (prod != null) {
-      this.myForm.patchValue(prod)
+      this.myForm.patchValue(prod);
+      this.productImages.set(prod.images);
     }
 
   });
@@ -72,7 +79,20 @@ export class ProductAdminFormPageComponent {
     }
   });
 
+  //marcas desde service
+  brandsResource = rxResource({
+    params: () => ({}),
+    stream: ({ }) => this.brandService.findAll({ page: 0, size: 100 }).pipe(map(response => response.content))
+  });
 
+  //categorias desde service
+  categoriesResource = rxResource({
+    params: () => ({}),
+    stream: ({ }) => this.categoryService.findAll({}).pipe(map(response => response.content))
+  });
+
+
+  //formulario producto
   myForm = this.fb.group({
     id: this.fb.control<number | null>(null),
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -99,7 +119,6 @@ export class ProductAdminFormPageComponent {
     this.isUploadingPhotos.set(true);
     document.body.classList.add("overflow-hidden")
 
-
     request.subscribe({
       next: (response) => {
         Swal.fire({
@@ -121,14 +140,6 @@ export class ProductAdminFormPageComponent {
 
   };
 
-
-  //devuelve un array de las url de las imagenes del producto
-  resizedImages = computed(() => {
-    let images = this.productResource.value()?.images.map(img => this.imageUtils.resizeImage(img.imageUrl, 300));
-    return images;
-  });
-
-
   //evento al seleccionar imagenes en el input file
   selectFiles(event: Event) {
     const files = (event.target as HTMLInputElement).files;
@@ -148,16 +159,37 @@ export class ProductAdminFormPageComponent {
     }
   };
 
+  //abre la imagen del producto en una pestaña nueva
+  openImage(img: HTMLImageElement) {
+    const url = img.src;
+    window.open(url)
+  }
 
-  brandsResource = rxResource({
-    params: () => ({}),
-    stream: ({ }) => this.brandService.findAll({ page: 0, size: 100 }).pipe(map(response => response.content))
-  });
+  
+  deleteImage(publicId: string) {
+    Swal.fire({
+      title: "Advertencia",
+      text: `Estas seguro de eliminar esta imagen?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: `Sí`
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.deleteProductImage(publicId).subscribe({
+          next: () => {
+            Swal.fire({ title: "Aviso!",text: `Imagen eliminada!`, icon: "success"});
+            this.productImages.update(products=> products.filter(img => img.publicId!=publicId));
+          },
+          error: (e) => console.log(e.error)
+        });
+      }
+    });
 
-  categoriesResource = rxResource({
-    params: () => ({}),
-    stream: ({ }) => this.categoryService.findAll({}).pipe(map(response => response.content))
-  });
+  }
+
+
 
 
   compararEntities(e1: BaseEntity, e2: BaseEntity) {

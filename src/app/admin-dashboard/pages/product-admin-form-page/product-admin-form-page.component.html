@@ -69,8 +69,17 @@
       <label for="" class="text-red-400">Fotos</label>
 
       <div class=" grid grid-cols-4 ">
-        @for (urlPhoto of resizedImages() ; track urlPhoto) {
-        <img [src]="urlPhoto" alt="urlPhoto" class="size-30 h-40">
+        @for (productImage of productImages() ; track productImage.id) {
+
+        <div class="">
+          <img [src]="imageUtils.resizeImage(productImage.imageUrl,300)" title="abrir imagen" alt="urlPhoto" class="size-30 h-40 cursor-pointer "
+            (click)="openImage(img)" #img>
+
+            <div class="flex gap-2 items-center cursor-pointer" (click)="deleteImage(productImage.publicId)">
+             <fa-icon [icon]="iconoBorrar" class="text-red-600 hover:text-red-800"></fa-icon>
+             <p class="text-xs text-red-500">eliminar</p>
+            </div>
+        </div>
         }@empty{
         <p class="text-sm  col-span-4">Este producto aun no tiene fotos</p>
         }
@@ -79,13 +88,17 @@
 
     <!-- uploading photos layout -->
     @if (isUploadingPhotos()) {
-     <saving-overlay />
+    <saving-overlay />
     }
 
 
-    <div class="pt-4">
-      <button type="submit" [disabled]="myForm.invalid"
-        class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:text-gray-500 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300">
+    <div class="pt-4  flex gap-10 justify-center">
+      <button type="button" routerLink="/admin/products" class="w-fit bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300
+          cursor-pointer">
+        Volver
+      </button>
+      <button type="submit" [disabled]="myForm.invalid" class="w-fit bg-red-600 hover:bg-red-700 disabled:bg-gray-700 disabled:text-gray-500
+         text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 cursor-pointer">
         Guardar Producto
       </button>
     </div>
