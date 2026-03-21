@@ -1,11 +1,10 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 import { toSignal, rxResource } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Brand } from '../../../brands/interfaces/brand.interface';
-import { BrandService } from '../../../brands/service/brand.service';
 import { CategoryService } from '../../../categories/service/category.service';
 import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
 
@@ -13,7 +12,7 @@ import { FormErrorLabelComponent } from "../../../shared/components/form-error-l
   selector: 'app-category-admin-form-page',
   templateUrl: './category-admin-form-page.component.html',
   styleUrls: ['./category-admin-form-page.component.css'],
-  imports: [ReactiveFormsModule, FormErrorLabelComponent]
+  imports: [ReactiveFormsModule, FormErrorLabelComponent,RouterLink]
 })
 export class CategoryAdminFormPageComponent {
   fb = inject(FormBuilder);
