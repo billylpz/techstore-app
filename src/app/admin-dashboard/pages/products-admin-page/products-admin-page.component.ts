@@ -3,7 +3,7 @@ import { Component, computed, DestroyRef, effect, EventEmitter, inject, OnInit, 
 import { ProductsTableComponent } from '../../../products/components/products-table/products-table.component';
 import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, catchError, of, delay, tap, debounceTime, distinctUntilChanged } from 'rxjs';
-import { ProductService } from '../../../products/service/product.service';
+import { ProductService } from '../../../products/services/product.service';
 import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 import { RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';

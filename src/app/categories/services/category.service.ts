@@ -1,7 +1,7 @@
 import {  Injectable } from '@angular/core';
 
 import { Category } from '../interfaces/category.interface';
-import { CommonService } from '../../shared/service/common.service';
+import { CommonService } from '../../shared/services/common.service';
 
 @Injectable({
   providedIn: 'root'

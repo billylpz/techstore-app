@@ -1,9 +1,9 @@
 import { Category } from './../../../categories/interfaces/category.interface';
-import { ProductService } from './../../../products/service/product.service';
+import { ProductService } from '../../../products/services/product.service';
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CategoryService } from '../../../categories/service/category.service';
-import { BrandService } from '../../../brands/service/brand.service';
+import { CategoryService } from '../../../categories/services/category.service';
+import { BrandService } from '../../../brands/services/brand.service';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, delay, map, of, timeout } from 'rxjs';
 import { Product } from '../../../products/interfaces/product.interface';

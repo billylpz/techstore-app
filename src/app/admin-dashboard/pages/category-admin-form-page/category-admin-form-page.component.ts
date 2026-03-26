@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Brand } from '../../../brands/interfaces/brand.interface';
-import { CategoryService } from '../../../categories/service/category.service';
+import { CategoryService } from '../../../categories/services/category.service';
 import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
 
 @Component({

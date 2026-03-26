@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
-import { TokenService } from '../../../auth/service/jwt/token.service';
+import { TokenService } from '../../../auth/jwt/token.service';
 
 @Component({
   selector: 'admin-navbar',

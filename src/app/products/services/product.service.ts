@@ -1,6 +1,6 @@
-import { Product } from './../interfaces/product.interface';
+import { Product } from '../interfaces/product.interface';
 import { Injectable } from '@angular/core';
-import { CommonService, PageOptions } from '../../shared/service/common.service';
+import { CommonService, PageOptions } from '../../shared/services/common.service';
 import { catchError, delay, Observable, of, tap } from 'rxjs';
 import { PageResponse } from '../../shared/interfaces/page-response.interface';
 

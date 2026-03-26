@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CategoryService } from '../../../categories/service/category.service';
+import { CategoryService } from '../../../categories/services/category.service';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { delay, catchError, of } from 'rxjs';
 import Swal from 'sweetalert2';

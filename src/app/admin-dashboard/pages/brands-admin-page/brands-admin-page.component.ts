@@ -5,7 +5,7 @@ import { BrandsTableComponent } from "../../../brands/components/brands-table/br
 import { rxResource } from '@angular/core/rxjs-interop';
 import { delay, catchError, of } from 'rxjs';
 import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
-import { BrandService } from '../../../brands/service/brand.service';
+import { BrandService } from '../../../brands/services/brand.service';
 import { RouterLink } from '@angular/router';
 import { Brand } from '../../../brands/interfaces/brand.interface';
 import Swal from 'sweetalert2';

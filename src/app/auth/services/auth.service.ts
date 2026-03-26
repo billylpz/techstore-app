@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { LoginRequest } from '../interfaces/login-request';
 import { catchError, Observable, of, tap, throwError } from 'rxjs';
-import { TokenService } from './jwt/token.service';
+import { TokenService } from '../jwt/token.service';
 
 @Injectable({
   providedIn: 'root'

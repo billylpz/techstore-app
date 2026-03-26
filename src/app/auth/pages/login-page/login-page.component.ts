@@ -1,9 +1,9 @@
-import { TokenService } from './../../service/jwt/token.service';
+import { TokenService } from '../../jwt/token.service';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
-import { AuthService } from '../../service/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../interfaces/login-request';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
