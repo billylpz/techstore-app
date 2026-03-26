@@ -13,7 +13,7 @@ export class AdminNavbarComponent {
   router = inject(Router);
 
   logOut(): void {
-    this.tokenService.remove();
+    this.tokenService.clean();
     this.router.navigate(['/auth'])
   }
 }

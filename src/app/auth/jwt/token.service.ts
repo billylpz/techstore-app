@@ -8,7 +8,7 @@ export class TokenService {
     sessionStorage.setItem("auth_token", token);
   }
 
-  remove(): void {
+  clean(): void {
     sessionStorage.removeItem("auth_token");
   }
 
@@ -20,6 +20,11 @@ export class TokenService {
     const token = this.getToken();
     if (!token) return null;
     return jwtDecode(token);
+  }
+
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    return !token ? false : true;
   }
 
   isAdmin(): boolean {
@@ -44,32 +49,4 @@ export class TokenService {
   }
 
 
-
-
-  // saveToken(token: string): void {
-  //   localStorage.setItem('auth_token', token);
-  // }
-
-  // getToken(): string | null {
-  //   return localStorage.getItem('auth_token');
-  // }
-
-  // removeToken(): void {
-  //   localStorage.removeItem('auth_token');
-  // }
-
-  // isAdmin(): boolean {
-  //   const token = this.getToken();
-  //   if (!token) return false;
-  //   const decoded: any = jwtDecode(token);
-  //   // Ajusta 'roles' según cómo los envíes desde Spring Boot
-  //   return decoded.roles && decoded.roles.includes('ROLE_ADMIN');
-  // }
-
-  // getUsername(): string | null {
-  //   const token = this.getToken();
-  //   if (!token) return null;
-  //   const decoded: any = jwtDecode(token);
-  //   return decoded.sub; // El 'subject' del JWT suele ser el username
-  // }
 }
