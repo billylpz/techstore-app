@@ -31,7 +31,6 @@ export class ProductService extends CommonService<Product> {
       tap(response => {
         sessionStorage.setItem(key, JSON.stringify(response))
       }),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
@@ -40,7 +39,6 @@ export class ProductService extends CommonService<Product> {
 
     return this.http.post<Product>(`${this.urlApi}/with-images`, formData).pipe(
       tap(() => this.clearCache()),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
@@ -50,7 +48,6 @@ export class ProductService extends CommonService<Product> {
 
     return this.http.put<Product>(`${this.urlApi}/with-images/${product.id}`, formData).pipe(
       tap(() => this.clearCache()),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
@@ -58,7 +55,6 @@ export class ProductService extends CommonService<Product> {
   deleteProductImage(publicId: string): Observable<void> {
     return this.http.delete<void>(`${this.urlApi}/product-image`, { params: { publicId } }).pipe(
       tap(() => this.clearCache()),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 

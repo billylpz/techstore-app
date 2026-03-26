@@ -41,7 +41,6 @@ export class CommonService<E extends BaseEntity> {
       tap(response => {
         sessionStorage.setItem(key, JSON.stringify(response))
       }),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
@@ -64,7 +63,6 @@ export class CommonService<E extends BaseEntity> {
       tap(response => {
         sessionStorage.setItem(key, JSON.stringify(response))
       }),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
@@ -73,35 +71,30 @@ export class CommonService<E extends BaseEntity> {
       return of(null);
     }
     return this.http.get<E>(`${this.urlApi}/${id}`).pipe(
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
   save(entity: E): Observable<E> {
     return this.http.post<E>(this.urlApi, entity).pipe(
       tap(() => this.clearCache()),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
   update(entity: E): Observable<E> {
     return this.http.put<E>(`${this.urlApi}/${entity.id}`, entity).pipe(
       tap(() => this.clearCache()),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
   activate(id: number): Observable<any> {
     return this.http.patch<any>(`${this.urlApi}/${id}/activate`, null).pipe(
       tap(() => this.clearCache()),
-      catchError(e => this.handleErrorMessage(e))
     );
   }
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.urlApi}/${id}`).pipe(
-      tap(() => this.clearCache()),
-      catchError(e => this.handleErrorMessage(e))
+      tap(() => this.clearCache())
     );
   }
 
@@ -114,30 +107,5 @@ export class CommonService<E extends BaseEntity> {
     console.log("cache borrada");
   }
 
-  //extrae el message del objeto error del backend y lo devuelve como string envuelto en throw()
-  protected handleErrorMessage(error: HttpErrorResponse) {
-    let errorMessage = 'Ocurrió un error inesperado!';
-
-    if (error.status === 400) {
-      const errorBody = error.error;
-
-      // Caso A: Es el mapa de errores de validación de campos (BindingResult)
-      if (typeof errorBody === 'object' && !errorBody.message) {
-        // Extraemos los valores del objeto y los unimos con saltos de línea
-        errorMessage = JSON.stringify(errorBody);
-      }
-      // Caso B: Es tu excepción personalizada (DuplicateEntityException)
-      else {
-        errorMessage = errorBody?.message || errorMessage;
-      }
-    }
-    else if(error.status==403){
-      errorMessage = 'No tienes permisos para realizar esta operación!';
-    }
-    else {
-      errorMessage = error.error.message;
-    }
-
-    return throwError(() => errorMessage);
-  }
+  
 }

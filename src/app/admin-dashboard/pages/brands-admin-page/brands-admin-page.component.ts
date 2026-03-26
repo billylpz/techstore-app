@@ -60,7 +60,7 @@ export class BrandsAdminPageComponent {
             });
             this.brandsResource.reload();
           },
-          error: (e) => console.log(e.error)
+          error: (message) => Swal.fire("Alerta", message, "warning")
         });
       }
     });

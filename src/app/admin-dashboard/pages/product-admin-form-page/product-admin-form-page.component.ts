@@ -128,7 +128,7 @@ export class ProductAdminFormPageComponent {
         });
         document.body.classList.remove("overflow-hidden");
         this.isUploadingPhotos.set(false);
-        this.router.navigate(['products']);
+        this.router.navigate(['/admin/products']);
       },
       error: (message => {
         Swal.fire("Error", message, "error");
@@ -182,7 +182,7 @@ export class ProductAdminFormPageComponent {
             Swal.fire({ title: "Aviso!",text: `Imagen eliminada!`, icon: "success"});
             this.productImages.update(products=> products.filter(img => img.publicId!=publicId));
           },
-          error: (e) => console.log(e.error)
+          error: (message) => Swal.fire("Alerta",message,"warning")
         });
       }
     });

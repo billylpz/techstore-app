@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-categories-admin-page',
   templateUrl: './categories-admin-page.component.html',
   styleUrls: ['./categories-admin-page.component.css'],
-  imports: [CategoriesTableComponent, PaginatorComponent,RouterLink]
+  imports: [CategoriesTableComponent, PaginatorComponent, RouterLink]
 })
 export class CategoriesAdminPageComponent {
 
@@ -33,9 +33,9 @@ export class CategoriesAdminPageComponent {
 
 
   eliminarCategoria(categoria: Category) {
-    const isActive= categoria.active;
+    const isActive = categoria.active;
     let text = isActive ? 'deshabilitar' : 'habilitar';
-    const request= isActive ?  this.service.delete(categoria.id!) :  this.service.activate(categoria.id!);
+    const request = isActive ? this.service.delete(categoria.id!) : this.service.activate(categoria.id!);
 
     Swal.fire({
       title: "Advertencia",
@@ -48,15 +48,15 @@ export class CategoriesAdminPageComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         request.subscribe({
-          next:()=>{
+          next: () => {
             Swal.fire({
               title: "Aviso!",
-              text: `Categoria ${isActive ? 'deshabilitado':'habilitado'}!`,
+              text: `Categoria ${isActive ? 'deshabilitado' : 'habilitado'}!`,
               icon: "success"
             });
             this.categoriesResource.reload();
           },
-          error:(e)=>console.log(e.error)
+          error: (message) => Swal.fire("Alerta", message, "warning")
         });
       }
     });

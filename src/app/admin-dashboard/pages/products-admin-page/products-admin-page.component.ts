@@ -47,7 +47,7 @@ export class ProductsAdminPageComponent implements OnInit {
     }),
     stream: ({ params }) => {
       // Si hay texto en el buscador, llamamos al método de búsqueda
-      if (params.term && params.term.length>0) {
+      if (params.term && params.term.length > 0) {
         return this.service.findAllByName({ page: params.page, term: params.term }).pipe(
           delay(500)
         );
@@ -82,7 +82,7 @@ export class ProductsAdminPageComponent implements OnInit {
             });
             this.productsResource.reload();
           },
-          error: (e) => console.log(e.error)
+          error: (message) => Swal.fire("Alerta", message, "warning")
         });
       }
     });
