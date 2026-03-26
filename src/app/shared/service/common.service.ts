@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject} from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BaseEntity } from '../interfaces/base-entity.interface';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -130,6 +130,9 @@ export class CommonService<E extends BaseEntity> {
       else {
         errorMessage = errorBody?.message || errorMessage;
       }
+    }
+    else if(error.status==403){
+      errorMessage = 'No tienes permisos para realizar esta operación!';
     }
     else {
       errorMessage = error.error.message;

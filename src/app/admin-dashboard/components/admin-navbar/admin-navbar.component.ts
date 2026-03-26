@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { Router, RouterLink } from "@angular/router";
+import { TokenService } from '../../../auth/service/jwt/token.service';
 
 @Component({
   selector: 'admin-navbar',
@@ -7,11 +8,12 @@ import { RouterLink } from "@angular/router";
   styleUrls: ['./admin-navbar.component.css'],
   imports: [RouterLink]
 })
-export class AdminNavbarComponent implements OnInit {
+export class AdminNavbarComponent {
+  tokenService = inject(TokenService);
+  router = inject(Router);
 
-  constructor() { }
-
-  ngOnInit() {
+  logOut(): void {
+    this.tokenService.remove();
+    this.router.navigate(['/auth'])
   }
-
 }
