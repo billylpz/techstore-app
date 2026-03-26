@@ -5,7 +5,7 @@ import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { map, catchError, of, delay, tap, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ProductService } from '../../../products/services/product.service';
 import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Product } from '../../../products/interfaces/product.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -21,6 +21,8 @@ export class ProductsAdminPageComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
   private service = inject(ProductService);
   paginatorService = inject(PaginatorService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
 
   searchByName = new FormControl('');
   searchResult = signal<string | null>('');
@@ -31,13 +33,18 @@ export class ProductsAdminPageComponent implements OnInit {
       distinctUntilChanged(),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(value => {
-      this.searchResult.set(value?.trim() ?? '')
+      this.searchResult.set(value?.trim() ?? '');
+
+      //reseteamos el param page a 1
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { page: 1 },
+        queryParamsHandling: 'merge'
+      });
+
     })
   }
 
-  effects = effect(() => {
-
-  });
 
   productsResource = rxResource({
     // Cuando 'page' o 'term' (que son señales) cambien, esto se dispara solo
