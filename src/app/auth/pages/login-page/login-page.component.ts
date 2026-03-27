@@ -5,14 +5,14 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../interfaces/login-request';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, FormErrorLabelComponent]
+  imports: [CommonModule, ReactiveFormsModule, FormErrorLabelComponent, RouterLink]
 })
 export class LoginPageComponent {
   private fb = inject(FormBuilder);
