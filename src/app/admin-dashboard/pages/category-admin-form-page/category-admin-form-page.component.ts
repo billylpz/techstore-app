@@ -4,9 +4,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import Swal from 'sweetalert2';
-import { Brand } from '../../../brands/interfaces/brand.interface';
 import { CategoryService } from '../../../categories/services/category.service';
 import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
+import { Category } from '../../../categories/interfaces/category.interface';
 
 @Component({
   selector: 'app-category-admin-form-page',
@@ -34,7 +34,7 @@ export class CategoryAdminFormPageComponent {
 
       const idNumber = Number(idParam);
       if (isNaN(idNumber)) {
-        this.router.navigate(['brands'])
+        this.router.navigate(['categories'])
         return null
       }
       return idNumber <= 0 ? null : idNumber;
@@ -60,7 +60,7 @@ export class CategoryAdminFormPageComponent {
       return;
     }
 
-    const category = this.myForm.value as Brand
+    const category = this.myForm.value as Category
 
     const request = (category.id && category.id > 0) ? this.service.update(category) : this.service.save(category);
 
