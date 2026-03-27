@@ -1,0 +1,39 @@
+<div class="flex flex-col justify-center mt-10 gap-5">
+  <table class="table-auto w-full  border-separate border-spacing-y-2 ">
+    <thead>
+      <tr class="text-left border-b border-gray-700 text-red-400">
+        <th class="px-4 py-2">ID</th>
+        <th class="px-4 py-2">NOMBRE</th>
+        <th class="px-4 py-2 text-right">APELLIDO</th>
+        <th class="px-4 py-2 text-center">USERNAME</th>
+        <th class="px-4 py-2 text-center">EMAIL</th>
+        <th class="px-4 py-2">ESTADO</th>
+        <th class="px-4 py-2">FECHA CREACIÓN</th>
+        <th class="px-4 py-2">EDITAR</th>
+        <th class="px-4 py-2">ACCION</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (user of users() ; track user.id) {
+      <tr class="hover:bg-gray-800 transition-colors text-sm">
+        <td class="px-4 py-3 border-t border-gray-700">{{user.id}}</td>
+        <td class="px-4 py-3 border-t border-gray-700">{{user.name}}</td>
+        <td class="px-4 py-3 border-t border-gray-700">{{user.lastname}}</td>
+        <td class="px-4 py-3 border-t border-gray-700">{{user.username}}</td>
+        <td class="px-4 py-3 border-t border-gray-700">{{user.email}}</td>
+        <td class="px-4 py-3 border-t border-gray-700 text-center" [ngClass]="user.active | activeStateColor">
+          {{user.active | activeTextEntity}}</td>
+        <td class="px-4 py-3 border-t border-gray-700">{{user.createdAt | date:'medium'}}</td>
+        <td class="px-4 py-3 border-t border-gray-700">
+          <a class="bg-warning px-3 text-black rounded-sm  " [routerLink]="['form',user.id]">Editar</a>
+        </td>
+        <td class="px-4 py-3 border-t border-gray-700">
+          <button type="button" class=" px-3 text-black rounded-sm cursor-pointer border" [ngClass]="!user.active | activeStateColor"
+            (click)="eliminar(user)">{{user.active ? 'Deshabilitar':'Habilitar'}}</button>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

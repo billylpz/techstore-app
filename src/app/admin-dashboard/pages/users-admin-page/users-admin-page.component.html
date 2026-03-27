@@ -1,0 +1,27 @@
+<section class="">
+  <h1 class="text-4xl text-center my-10">Lista de Usuarios</h1>
+  <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Usuario</a>
+
+  <div class="flex justify-center">
+    <paginator [totalPages]="usersResource.value()?.totalPages" [currentPage]="usersResource.value()?.page" />
+  </div>
+
+  <div class="flex justify-center items-center gap-3   ">
+    <label for="search-by" class="text-gray-400">Buscar por nombre/apellido:</label>
+    <input type="text" id="search-by" class="border rounded-sm px-2" autofocus>
+  </div>
+
+
+  @if (usersResource.isLoading()) {
+  <div class=" flex justify-center h-50 ">
+    <span class="loading loading-dots loading-xl "></span>
+  </div>
+  } @else {
+  <users-table [users]="usersResource.value()?.content" (onDelete)="eliminarUser($event)"></users-table>
+
+  }
+  <div class="flex justify-center">
+    <paginator [totalPages]="usersResource.value()?.totalPages" [currentPage]="usersResource.value()?.page" />
+  </div>
+
+</section>
