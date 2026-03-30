@@ -1,12 +1,9 @@
 import { Product } from '../interfaces/product.interface';
 import { Injectable } from '@angular/core';
-import { CommonService, PageOptions } from '../../shared/services/common.service';
-import { catchError, delay, Observable, of, tap } from 'rxjs';
-import { PageResponse } from '../../shared/interfaces/page-response.interface';
+import { CommonService} from '../../shared/services/common.service';
+import {   Observable, tap } from 'rxjs';
 
-export interface SearchByOptions extends PageOptions {
-  term: string
-}
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,23 +13,7 @@ export class ProductService extends CommonService<Product> {
     super("/api/products")
   }
 
-  findAllByName(options: SearchByOptions): Observable<PageResponse<Product>> {
-    const { term = '', page = 0 } = options;
-    const key = `cache-${this.apiPath}-${page}-${term}`;
-
-    if (sessionStorage.getItem(key)) {
-      const response = JSON.parse(sessionStorage.getItem(key) || "{}");
-      if (response.content != null && response.content.length > 0) {
-        return of(response).pipe(delay(300));
-      }
-    }
-
-    return this.http.get<PageResponse<Product>>(`${this.urlApi}/by-term`, { params: { page, term } }).pipe(
-      tap(response => {
-        sessionStorage.setItem(key, JSON.stringify(response))
-      }),
-    );
-  }
+  
 
   saveWithImages(product: Product, files: File[]): Observable<Product> {
     const formData = this.buildFormData(product, files);

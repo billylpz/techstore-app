@@ -14,7 +14,7 @@
       <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Producto</a>
     </div>
 
-    <div class="flex justify-center items-center gap-3  ">
+    <div class="flex justify-center items-center gap-3 ">
       <label for="search-by" class="text-gray-400">Buscar por nombre:</label>
       <input type="text" id="search-by" class="border rounded-sm px-2" autofocus [formControl]="searchByName">
     </div>
@@ -24,9 +24,8 @@
   <div class=" flex justify-center h-50 ">
     <span class="loading loading-dots loading-xl "></span>
   </div>
-  } @else if (productsResource.value()?.totalElements==0) {
-  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontró los productos con nombre
-    '{{searchResult()}}'
+  } @else if (productsResource.value()?.content?.length==0) {
+  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron productos
   </p>
   }
   @else {

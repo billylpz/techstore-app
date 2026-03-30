@@ -47,15 +47,14 @@ export class ProductsAdminPageComponent implements OnInit {
 
 
   productsResource = rxResource({
-    // Cuando 'page' o 'term' (que son señales) cambien, esto se dispara solo
     params: () => ({
       page: this.paginatorService.currentPage() - 1,
-      term: this.searchResult()
+      name: this.searchResult()
     }),
     stream: ({ params }) => {
       // Si hay texto en el buscador, llamamos al método de búsqueda
-      if (params.term && params.term.length > 0) {
-        return this.service.findAllByName({ page: params.page, term: params.term }).pipe(
+      if (params.name && params.name.length > 0) {
+        return this.service.findAllByName({ page: params.page, name: params.name }).pipe(
           delay(500)
         );
       }

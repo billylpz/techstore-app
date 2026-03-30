@@ -1,13 +1,18 @@
 import { inject} from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BaseEntity } from '../interfaces/base-entity.interface';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError, delay, Observable, of, tap, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import {  delay, Observable, of, tap} from 'rxjs';
 import { PageResponse } from '../interfaces/page-response.interface';
 
 export interface PageOptions {
   page?: number;
   size?: number;
+}
+
+export interface SearchByOptions extends PageOptions {
+  term?: string,
+  name?: string,
 }
 
 
@@ -66,6 +71,24 @@ export class CommonService<E extends BaseEntity> {
     );
   }
 
+  findAllByName(options: SearchByOptions): Observable<PageResponse<E>> {
+      const { name = '', page = 0, size=10 } = options;
+      const key = `cache-${this.apiPath}-${page}-${name}`;
+  
+      if (sessionStorage.getItem(key)) {
+        const response = JSON.parse(sessionStorage.getItem(key) || "{}");
+        if (response.content != null && response.content.length > 0) {
+          return of(response).pipe(delay(300));
+        }
+      }
+  
+      return this.http.get<PageResponse<E>>(`${this.urlApi}/by-name`, { params: { page, name,size } }).pipe(
+        tap(response => {
+          sessionStorage.setItem(key, JSON.stringify(response))
+        }),
+      );
+    }
+
   findById(id: number | null): Observable<E | null> {
     if (!id) {
       return of(null);
@@ -104,7 +127,6 @@ export class CommonService<E extends BaseEntity> {
   protected clearCache(): void {
     Object.keys(sessionStorage).filter(key => key.startsWith(`cache-${this.apiPath}`))
       .forEach(key => sessionStorage.removeItem(key));
-    console.log("cache borrada");
   }
 
   
