@@ -6,9 +6,9 @@
     <paginator [totalPages]="usersResource.value()?.totalPages" [currentPage]="usersResource.value()?.page" />
   </div>
 
-  <div class="flex justify-center items-center gap-3   ">
+  <div class="flex justify-center items-center gap-3  my-5 ">
     <label for="search-by" class="text-gray-400">Buscar por nombre/apellido:</label>
-    <input type="text" id="search-by" class="border rounded-sm px-2" autofocus>
+    <input type="text" id="search-by" class="border rounded-sm px-2" autofocus [formControl]="searchByInput">
   </div>
 
 
@@ -16,7 +16,13 @@
   <div class=" flex justify-center h-50 ">
     <span class="loading loading-dots loading-xl "></span>
   </div>
-  } @else {
+
+  } @else if (usersResource.value()?.content?.length==0) {
+  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron usuarios
+  </p>
+  }
+
+  @else {
   <users-table [users]="usersResource.value()?.content" (onDelete)="eliminarUser($event)"></users-table>
 
   }
