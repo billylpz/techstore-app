@@ -9,14 +9,24 @@
   }
 
 
-  <div class="flex gap-3 mt-10 ">
-    <div class="flex justify-start w-1/4">
+  <div class="flex gap-3 mt-10  justify-between">
+    <div class="flex justify-start ">
       <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Producto</a>
     </div>
 
     <div class="flex justify-center items-center gap-3 ">
-      <label for="search-by" class="text-gray-400">Buscar por nombre:</label>
+      <label for="search-by" class="text-gray-400" >Buscar por nombre:</label>
       <input type="text" id="search-by" class="border rounded-sm px-2" autofocus [formControl]="searchByName">
+    </div>
+
+    <div class="flex items-center">
+      <label for="select">Filtrar por:</label>
+      <select name="filterBy" id="select" class="" (change)="onFilterChange(selectValue.value)" #selectValue>
+        <option value="1" class="text-black">--seleccione--</option>
+        <option value="1" class="text-black">Todos</option>
+        <option value="2" class="text-black">Habilitado</option>
+        <option value="3" class="text-black">Inhabilitado</option>
+      </select>
     </div>
   </div>
 

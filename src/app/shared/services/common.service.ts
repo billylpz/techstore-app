@@ -1,8 +1,8 @@
-import { inject} from '@angular/core';
+import { inject } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { BaseEntity } from '../interfaces/base-entity.interface';
 import { HttpClient } from '@angular/common/http';
-import {  delay, Observable, of, tap} from 'rxjs';
+import { delay, Observable, of, tap } from 'rxjs';
 import { PageResponse } from '../interfaces/page-response.interface';
 
 export interface PageOptions {
@@ -13,6 +13,7 @@ export interface PageOptions {
 export interface SearchByOptions extends PageOptions {
   term?: string,
   name?: string,
+  activeSelection?: string,
 }
 
 
@@ -49,9 +50,9 @@ export class CommonService<E extends BaseEntity> {
     );
   }
 
-  findAllActive(options: PageOptions): Observable<PageResponse<E>> {
-    const { page = 0, size = 10 } = options;
-    const key = `cache-${this.apiPath}-${page}-${size}-active`;
+  findAllByFilters(options: SearchByOptions): Observable<PageResponse<E>> {
+    const { page = 0, size = 10, name = '', activeSelection = '1' } = options;
+    const key = `cache-${this.apiPath}-${page}-${size}-filter:${name}-${activeSelection}`;
 
     if (sessionStorage.getItem(key)) {
       const response = JSON.parse(sessionStorage.getItem(key) || "{}");
@@ -60,9 +61,9 @@ export class CommonService<E extends BaseEntity> {
       }
     }
 
-    return this.http.get<PageResponse<E>>(`${this.urlApi}/active`, {
+    return this.http.get<PageResponse<E>>(`${this.urlApi}/by-filters`, {
       params: {
-        page, size
+        page, size, name, activeSelection
       }
     }).pipe(
       tap(response => {
@@ -70,24 +71,6 @@ export class CommonService<E extends BaseEntity> {
       }),
     );
   }
-
-  findAllByName(options: SearchByOptions): Observable<PageResponse<E>> {
-      const { name = '', page = 0, size=10 } = options;
-      const key = `cache-${this.apiPath}-${page}-${name}`;
-  
-      if (sessionStorage.getItem(key)) {
-        const response = JSON.parse(sessionStorage.getItem(key) || "{}");
-        if (response.content != null && response.content.length > 0) {
-          return of(response).pipe(delay(300));
-        }
-      }
-  
-      return this.http.get<PageResponse<E>>(`${this.urlApi}/by-name`, { params: { page, name,size } }).pipe(
-        tap(response => {
-          sessionStorage.setItem(key, JSON.stringify(response))
-        }),
-      );
-    }
 
   findById(id: number | null): Observable<E | null> {
     if (!id) {
@@ -129,5 +112,5 @@ export class CommonService<E extends BaseEntity> {
       .forEach(key => sessionStorage.removeItem(key));
   }
 
-  
+
 }

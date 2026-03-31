@@ -23,9 +23,9 @@ export class ProductsAdminPageComponent implements OnInit {
   paginatorService = inject(PaginatorService);
   router = inject(Router);
   route = inject(ActivatedRoute);
-
   searchByName = new FormControl('');
-  searchResult = signal<string | null>('');
+  searchResult = signal<string>('');
+  filterSelection = signal<string>('1');
 
   ngOnInit(): void {
     this.searchByName.valueChanges.pipe(
@@ -36,30 +36,49 @@ export class ProductsAdminPageComponent implements OnInit {
       this.searchResult.set(value?.trim() ?? '');
 
       //reseteamos el param page a 1
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { page: 1 },
-        queryParamsHandling: 'merge'
-      });
+      this.paginatorService.reset()
 
     })
   }
+
+  onFilterChange(value: string) {
+    this.filterSelection.set(value);
+
+    // Siempre que filtramos, volvemos a la página 1
+    this.paginatorService.reset()
+  }
+
+  errorEffect = effect(() => {
+    const error = this.productsResource.error();
+    if (error) {
+      Swal.fire("Error de Red", String(error), "error");
+    }
+  });
+
+  effects = effect(() => {
+    const resource = this.productsResource.value();
+
+    //si el param page es mayor a las paginas del recurso, se reincia el param page a '1'
+    if (resource && resource.totalPages! < this.paginatorService.currentPage()) {
+      this.paginatorService.reset()
+    }
+  });
 
 
   productsResource = rxResource({
     params: () => ({
       page: this.paginatorService.currentPage() - 1,
+      activeSelection: this.filterSelection(),
       name: this.searchResult()
     }),
     stream: ({ params }) => {
-      // Si hay texto en el buscador, llamamos al método de búsqueda
-      if (params.name && params.name.length > 0) {
-        return this.service.findAllByName({ page: params.page, name: params.name }).pipe(
-          delay(500)
-        );
-      }
-      // Si no hay texto, llamamos al findAll normal
-      return this.service.findAll({ page: params.page }).pipe(delay(500));
+      return this.service.findAllByFilters({
+        page: params.page,
+        name: params.name,
+        activeSelection: params.activeSelection
+      }).pipe(
+        delay(500),
+      );;
     }
   });
 
