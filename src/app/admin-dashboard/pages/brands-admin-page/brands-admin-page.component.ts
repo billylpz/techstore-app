@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, OnInit } from '@angular/core';
 import { PaginatorComponent } from "../../../shared/components/paginator/paginator.component";
 import { ProductsTableComponent } from "../../../products/components/products-table/products-table.component";
 import { BrandsTableComponent } from "../../../brands/components/brands-table/brands-table.component";
@@ -6,7 +6,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { delay, catchError, of } from 'rxjs';
 import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
 import { BrandService } from '../../../brands/services/brand.service';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Brand } from '../../../brands/interfaces/brand.interface';
 import Swal from 'sweetalert2';
 
@@ -22,6 +22,22 @@ export class BrandsAdminPageComponent {
 
   private service = inject(BrandService);
   paginatorService = inject(PaginatorService);
+  router = inject(Router);
+  route = inject(ActivatedRoute);
+
+  errorEffect = effect(() => {
+    const error = this.brandsResource.error();
+    if (error) {
+      Swal.fire("Error de Red", String(error), "error");
+    }
+  });
+
+  effects = effect(() => {
+    const resource = this.brandsResource.value();
+    if (resource && resource.totalPages < this.paginatorService.currentPage()) {
+      this.paginatorService.reset();
+    }
+  });
 
   brandsResource = rxResource({
     params: () => ({ page: this.paginatorService.currentPage() - 1 }),
@@ -30,7 +46,6 @@ export class BrandsAdminPageComponent {
 
       return this.service.findAll({ page: page }).pipe(
         delay(500),
-        catchError(e => of(console.log(e)))
       );
     }
   });

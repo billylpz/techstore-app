@@ -7,7 +7,6 @@ import Swal from 'sweetalert2';
 import { User } from '../../../users/interfaces/user.interface';
 import { UserService } from '../../../users/services/user.service';
 import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
-import { FormUtils } from '../../../shared/utils/form-utils';
 
 @Component({
   selector: 'app-user-admin-form-page',

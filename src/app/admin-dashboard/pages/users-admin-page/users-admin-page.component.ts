@@ -1,7 +1,7 @@
 import { Component, effect, inject, signal } from '@angular/core';
 import { User } from '../../../users/interfaces/user.interface';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { delay, catchError, of, debounceTime, distinctUntilChanged, tap, EMPTY } from 'rxjs';
+import { delay,debounceTime, distinctUntilChanged } from 'rxjs';
 import Swal from 'sweetalert2';
 import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
 import { UserService } from '../../../users/services/user.service';
@@ -40,12 +40,13 @@ export class UsersAdminPageComponent {
       })
   };
 
-  effects = effect(() => {
+  errorEffect = effect(() => {
     const error = this.usersResource.error();
     if (error) {
       Swal.fire("Error de Red", String(error), "error");
     }
   });
+
 
   usersResource = rxResource({
     params: () => ({ page: this.paginatorService.currentPage() - 1, term: this.searchByValue() }),
