@@ -131,7 +131,6 @@ export class ProductAdminFormPageComponent {
         this.router.navigate(['/admin/products']);
       },
       error: (message => {
-        Swal.fire("Error", message, "error");
         document.body.classList.remove("overflow-hidden");
         this.isUploadingPhotos.set(false);
       })

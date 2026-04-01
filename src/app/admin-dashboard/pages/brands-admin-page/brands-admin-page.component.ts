@@ -25,13 +25,6 @@ export class BrandsAdminPageComponent {
   router = inject(Router);
   route = inject(ActivatedRoute);
 
-  errorEffect = effect(() => {
-    const error = this.brandsResource.error();
-    if (error) {
-      Swal.fire("Error de Red", String(error), "error");
-    }
-  });
-
   effects = effect(() => {
     const resource = this.brandsResource.value();
     if (resource && resource.totalPages < this.paginatorService.currentPage()) {
@@ -75,7 +68,6 @@ export class BrandsAdminPageComponent {
             });
             this.brandsResource.reload();
           },
-          error: (message) => Swal.fire("Alerta", message, "warning")
         });
       }
     });

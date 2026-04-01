@@ -77,10 +77,7 @@ export class UserAdminFormPageComponent {
         });
 
         this.router.navigate(['/admin/users']);
-      },
-      error: (message => {
-        Swal.fire("Error", message, "error")
-      })
+      }
     });
   }
 

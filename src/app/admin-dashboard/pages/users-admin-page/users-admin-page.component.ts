@@ -40,14 +40,6 @@ export class UsersAdminPageComponent {
       })
   };
 
-  errorEffect = effect(() => {
-    const error = this.usersResource.error();
-    if (error) {
-      Swal.fire("Error de Red", String(error), "error");
-    }
-  });
-
-
   usersResource = rxResource({
     params: () => ({ page: this.paginatorService.currentPage() - 1, term: this.searchByValue() }),
     stream: ({ params }) => {
@@ -90,7 +82,6 @@ export class UsersAdminPageComponent {
             });
             this.usersResource.reload();
           },
-          error: (message) => Swal.fire("Alerta", message, "warning")
         });
       }
     });

@@ -73,10 +73,7 @@ export class CategoryAdminFormPageComponent {
         });
 
         this.router.navigate(['/admin/categories']);
-      },
-      error: (message => {
-        Swal.fire("Error", message, "error")
-      })
+      }
     });
   }
 

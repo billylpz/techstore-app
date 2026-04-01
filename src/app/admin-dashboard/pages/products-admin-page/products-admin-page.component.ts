@@ -48,13 +48,6 @@ export class ProductsAdminPageComponent implements OnInit {
     this.paginatorService.reset()
   }
 
-  errorEffect = effect(() => {
-    const error = this.productsResource.error();
-    if (error) {
-      Swal.fire("Error de Red", String(error), "error");
-    }
-  });
-
   effects = effect(() => {
     const resource = this.productsResource.value();
 
@@ -78,7 +71,7 @@ export class ProductsAdminPageComponent implements OnInit {
         activeSelection: params.activeSelection
       }).pipe(
         delay(500),
-      );;
+      );
     }
   });
 
@@ -107,7 +100,6 @@ export class ProductsAdminPageComponent implements OnInit {
             });
             this.productsResource.reload();
           },
-          error: (message) => Swal.fire("Alerta", message, "warning")
         });
       }
     });

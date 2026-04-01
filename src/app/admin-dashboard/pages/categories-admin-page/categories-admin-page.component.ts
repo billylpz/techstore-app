@@ -21,13 +21,6 @@ export class CategoriesAdminPageComponent {
   router = inject(Router);
   route = inject(ActivatedRoute);
 
-  errorEffect = effect(() => {
-    const error = this.categoriesResource.error();
-    if (error) {
-      Swal.fire("Error de Red", String(error), "error");
-    }
-  });
-
   effects = effect(() => {
     const resource = this.categoriesResource.value();
     if (resource && resource.totalPages < this.paginatorService.currentPage()) {
@@ -70,7 +63,6 @@ export class CategoriesAdminPageComponent {
             });
             this.categoriesResource.reload();
           },
-          error: (message) => Swal.fire("Alerta", message, "warning")
         });
       }
     });

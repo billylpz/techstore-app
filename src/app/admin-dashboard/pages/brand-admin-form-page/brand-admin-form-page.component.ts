@@ -73,10 +73,7 @@ export class BrandAdminFormPageComponent {
         });
 
         this.router.navigate(['/admin/brands']);
-      },
-      error: (message => {
-        Swal.fire("Error", message, "error")
-      })
+      }
     });
   }
 
