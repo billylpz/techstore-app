@@ -14,25 +14,22 @@ export class UserService extends CommonService<User> {
   }
 
 
-   findAllByNameOrLastname(options: SearchByOptions): Observable<PageResponse<User>> {
-      const { page = 0, size = 3, term='' } = options;
-      const key = `cache-${this.apiPath}-${page}-${size}-${term}`;
-  
-      if (sessionStorage.getItem(key)) {
-        const response = JSON.parse(sessionStorage.getItem(key) || "{}");
-        if (response.content != null && response.content.length > 0) {
-          return of(response).pipe(delay(300));
-        }
+  findAllByNameOrLastname(options: SearchByOptions): Observable<PageResponse<User>> {
+    const { page = 0, size = 3, term = '' } = options;
+
+    return this.http.get<PageResponse<User>>(`${this.urlApi}/by-term`, {
+      params: {
+        page, size, term
       }
-  
-      return this.http.get<PageResponse<User>>(`${this.urlApi}/by-term`, {
-        params: {
-          page, size, term
-        }
-      }).pipe(
-        tap(response => {
-          sessionStorage.setItem(key, JSON.stringify(response))
-        }),
-      );
-    }
+    })
+  }
+
+  override findAll(options: PageOptions): Observable<PageResponse<User>> {
+    const { page = 0, size = 5 } = options;
+    return this.http.get<PageResponse<User>>(this.urlApi, {
+      params: {
+        page, size
+      }
+    });
+  }
 }
