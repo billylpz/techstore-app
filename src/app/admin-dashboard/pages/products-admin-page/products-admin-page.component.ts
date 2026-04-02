@@ -1,52 +1,31 @@
 import { PaginatorService } from './../../../shared/components/paginator/paginator.service';
-import { Component, computed, DestroyRef, effect, EventEmitter, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { ProductsTableComponent } from '../../../products/components/products-table/products-table.component';
-import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { map, catchError, of, delay, tap, debounceTime, distinctUntilChanged } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { delay} from 'rxjs';
 import { ProductService } from '../../../products/services/product.service';
 import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Product } from '../../../products/interfaces/product.interface';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {  ReactiveFormsModule } from '@angular/forms';
+import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin-filter-bar.component";
 
 @Component({
   selector: 'app-products-admin-page',
   templateUrl: './products-admin-page.component.html',
   styleUrls: ['./products-admin-page.component.css'],
-  imports: [ProductsTableComponent, PaginatorComponent, RouterLink, ReactiveFormsModule]
+  imports: [ProductsTableComponent, PaginatorComponent, RouterLink, ReactiveFormsModule, AdminFilterBarComponent]
 })
-export class ProductsAdminPageComponent implements OnInit {
+export class ProductsAdminPageComponent{
 
   private destroyRef = inject(DestroyRef);
   private service = inject(ProductService);
   paginatorService = inject(PaginatorService);
   router = inject(Router);
   route = inject(ActivatedRoute);
-  searchByName = new FormControl('');
-  searchResult = signal<string>('');
+  searchByNameResult = signal<string>('');
   filterSelection = signal<string>('1');
-
-  ngOnInit(): void {
-    this.searchByName.valueChanges.pipe(
-      debounceTime(1000),
-      distinctUntilChanged(),
-      takeUntilDestroyed(this.destroyRef)
-    ).subscribe(value => {
-      this.searchResult.set(value?.trim() ?? '');
-
-      //reseteamos el param page a 1
-      this.paginatorService.reset()
-
-    })
-  }
-
-  onFilterChange(value: string) {
-    this.filterSelection.set(value);
-
-    // Siempre que filtramos, volvemos a la página 1
-    this.paginatorService.reset()
-  }
 
   effects = effect(() => {
     const resource = this.productsResource.value();
@@ -62,7 +41,7 @@ export class ProductsAdminPageComponent implements OnInit {
     params: () => ({
       page: this.paginatorService.currentPage() - 1,
       activeSelection: this.filterSelection(),
-      name: this.searchResult()
+      name: this.searchByNameResult()
     }),
     stream: ({ params }) => {
       return this.service.findAllByFilters({
