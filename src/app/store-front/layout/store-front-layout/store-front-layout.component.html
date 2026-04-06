@@ -1,3 +1,9 @@
-<p>
-  store-front-layout works!
-</p>
+<div class="flex flex-col h-screen">
+  <navbar />
+
+  <div class="flex-1 bg-white text-black px-15 py-10">
+    <router-outlet></router-outlet>
+  </div>
+
+  <app-footer />
+</div>

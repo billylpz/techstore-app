@@ -72,6 +72,14 @@ export class CommonService<E extends BaseEntity> {
     );
   }
 
+  findAllActive (options: SearchByOptions): Observable<PageResponse<E>> {
+    const { page = 0, size = 10} = options;
+
+    return this.http.get<PageResponse<E>>(`${this.urlApi}/active`, {
+      params: { page, size}
+    });
+  }
+
   findById(id: number | null): Observable<E | null> {
     if (!id) {
       return of(null);

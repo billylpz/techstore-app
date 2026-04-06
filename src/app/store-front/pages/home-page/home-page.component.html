@@ -1,0 +1,5 @@
+<div class="grid grid-cols-4 gap-15">
+  @for (product of productsResource.value()?.content; track product.id) {
+  <app-product-card [product]="product" />
+  }
+</div>

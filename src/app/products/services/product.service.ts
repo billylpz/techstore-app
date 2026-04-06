@@ -1,7 +1,8 @@
 import { Product } from '../interfaces/product.interface';
 import { Injectable } from '@angular/core';
-import { CommonService} from '../../shared/services/common.service';
-import {   Observable, tap } from 'rxjs';
+import { CommonService, PageOptions, SearchByOptions } from '../../shared/services/common.service';
+import { delay, Observable, of, tap } from 'rxjs';
+import { PageResponse } from '../../shared/interfaces/page-response.interface';
 
 
 
@@ -13,7 +14,15 @@ export class ProductService extends CommonService<Product> {
     super("/api/products")
   }
 
-  
+  findAllByNameOnlyActive(options: SearchByOptions): Observable<PageResponse<Product>> {
+    const { page = 0, size = 5 ,name='' } = options;
+
+    return this.http.get<PageResponse<Product>>(`${this.urlApi}/by-name-active`, {
+      params: {page, size, name}
+    });
+  }
+
+
 
   saveWithImages(product: Product, files: File[]): Observable<Product> {
     const formData = this.buildFormData(product, files);

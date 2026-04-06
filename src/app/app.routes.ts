@@ -12,5 +12,5 @@ export const routes: Routes = [
         path:'', loadChildren:()=> import('./store-front/store-front.routes')
     },
 
-    {path:'**', redirectTo:'admin'}
+    {path:'**', redirectTo:''}
 ];
