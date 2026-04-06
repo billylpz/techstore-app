@@ -1,11 +1,11 @@
-import { Component, effect, inject} from '@angular/core';
+import { Component, DestroyRef, effect, inject} from '@angular/core';
 import { FormBuilder,  ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
 import { BrandService } from '../../../brands/services/brand.service';
 import { Brand } from '../../../brands/interfaces/brand.interface';
 import Swal from 'sweetalert2';
-import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 
 @Component({
@@ -15,10 +15,11 @@ import { map } from 'rxjs';
   imports: [ReactiveFormsModule, FormErrorLabelComponent,RouterLink]
 })
 export class BrandAdminFormPageComponent {
+  private destroyRef = inject(DestroyRef);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private service = inject(BrandService)
   fb = inject(FormBuilder);
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  service = inject(BrandService)
 
   effects = effect(() => {
     const brand = this.brandResource.value();
@@ -64,7 +65,9 @@ export class BrandAdminFormPageComponent {
 
     const request = (brand.id && brand.id > 0) ? this.service.update(brand) : this.service.save(brand);
 
-    request.subscribe({
+    request.pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
       next: (response) => {
         Swal.fire({
           title: "Marca guardada!",

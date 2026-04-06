@@ -1,14 +1,15 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { PaginatorComponent } from "../../../shared/components/paginator/paginator.component";
 import { ProductsTableComponent } from "../../../products/components/products-table/products-table.component";
 import { BrandsTableComponent } from "../../../brands/components/brands-table/brands-table.component";
-import { rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { delay, catchError, of } from 'rxjs';
 import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
 import { BrandService } from '../../../brands/services/brand.service';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Brand } from '../../../brands/interfaces/brand.interface';
 import Swal from 'sweetalert2';
+import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin-filter-bar.component";
 
 
 
@@ -16,14 +17,14 @@ import Swal from 'sweetalert2';
   selector: 'app-brands-admin-page',
   templateUrl: './brands-admin-page.component.html',
   styleUrls: ['./brands-admin-page.component.css'],
-  imports: [PaginatorComponent, BrandsTableComponent, RouterLink]
+  imports: [PaginatorComponent, BrandsTableComponent, RouterLink, AdminFilterBarComponent]
 })
 export class BrandsAdminPageComponent {
-
+  private destroyRef = inject(DestroyRef);
   private service = inject(BrandService);
-  paginatorService = inject(PaginatorService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
+  private paginatorService = inject(PaginatorService);
+  searchByNameResult = signal<string>('');
+  filterSelection = signal<string>('1');
 
   effects = effect(() => {
     const resource = this.brandsResource.value();
@@ -33,11 +34,17 @@ export class BrandsAdminPageComponent {
   });
 
   brandsResource = rxResource({
-    params: () => ({ page: this.paginatorService.currentPage() - 1 }),
+    params: () => ({
+      page: this.paginatorService.currentPage() - 1,
+      name: this.searchByNameResult(),
+      activeSelection: this.filterSelection()
+    }),
     stream: ({ params }) => {
-      let page = params.page;
-
-      return this.service.findAll({ page: page }).pipe(
+      return this.service.findAllByFilters({
+        page: params.page,
+        name: params.name,
+        activeSelection: params.activeSelection
+      }).pipe(
         delay(500),
       );
     }
@@ -59,16 +66,19 @@ export class BrandsAdminPageComponent {
       confirmButtonText: `Sí, ${text}!`
     }).then((result) => {
       if (result.isConfirmed) {
-        request.subscribe({
-          next: () => {
-            Swal.fire({
-              title: "Aviso!",
-              text: `Marca ${isActive ? 'deshabilitada' : 'habilitada'}!`,
-              icon: "success"
-            });
-            this.brandsResource.reload();
-          },
-        });
+        request.pipe(
+          takeUntilDestroyed(this.destroyRef)
+        )
+          .subscribe({
+            next: () => {
+              Swal.fire({
+                title: "Aviso!",
+                text: `Marca ${isActive ? 'deshabilitada' : 'habilitada'}!`,
+                icon: "success"
+              });
+              this.brandsResource.reload();
+            },
+          });
       }
     });
   }

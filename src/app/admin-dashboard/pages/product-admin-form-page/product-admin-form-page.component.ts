@@ -1,10 +1,10 @@
 import { Category } from './../../../categories/interfaces/category.interface';
 import { ProductService } from '../../../products/services/product.service';
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CategoryService } from '../../../categories/services/category.service';
 import { BrandService } from '../../../brands/services/brand.service';
-import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { catchError, delay, map, of, timeout } from 'rxjs';
 import { Product } from '../../../products/interfaces/product.interface';
 import { FormErrorLabelComponent } from '../../../shared/components/form-error-label/form-error-label.component';
@@ -25,7 +25,7 @@ import { ProductImage } from '../../../products/interfaces/product-image.interfa
   imports: [ReactiveFormsModule, FormErrorLabelComponent, SavingOverlayComponent, RouterLink, FontAwesomeModule]
 })
 export class ProductAdminFormPageComponent {
-
+  private destroyRef = inject(DestroyRef);
   private fb = inject(FormBuilder);
   private categoryService = inject(CategoryService);
   private brandService = inject(BrandService);
@@ -36,7 +36,7 @@ export class ProductAdminFormPageComponent {
   imageUtils = ImageUtils;
   isUploadingPhotos = signal<boolean>(false);
   iconoBorrar = faTrashCan;
-  productImages=signal<ProductImage[]>([]);
+  productImages = signal<ProductImage[]>([]);
 
   effects = effect(() => {
     const prod = this.productResource.value();
@@ -65,7 +65,6 @@ export class ProductAdminFormPageComponent {
   productResource = rxResource({
     params: () => this.productId(),
     stream: ({ params: id }) => {
-
       if (id != null && id > 0) {
         return this.productService.findById(id).pipe(
           catchError((error) => {
@@ -119,7 +118,9 @@ export class ProductAdminFormPageComponent {
     this.isUploadingPhotos.set(true);
     document.body.classList.add("overflow-hidden")
 
-    request.subscribe({
+    request.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: (response) => {
         Swal.fire({
           title: "Producto guardado!",
@@ -164,7 +165,7 @@ export class ProductAdminFormPageComponent {
     window.open(url)
   }
 
-  
+
   deleteImage(publicId: string) {
     Swal.fire({
       title: "Advertencia",
@@ -176,12 +177,14 @@ export class ProductAdminFormPageComponent {
       confirmButtonText: `Sí`
     }).then((result) => {
       if (result.isConfirmed) {
-        this.productService.deleteProductImage(publicId).subscribe({
+        this.productService.deleteProductImage(publicId).pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
           next: () => {
-            Swal.fire({ title: "Aviso!",text: `Imagen eliminada!`, icon: "success"});
-            this.productImages.update(products=> products.filter(img => img.publicId!=publicId));
+            Swal.fire({ title: "Aviso!", text: `Imagen eliminada!`, icon: "success" });
+            this.productImages.update(products => products.filter(img => img.publicId != publicId));
           },
-          error: (message) => Swal.fire("Alerta",message,"warning")
+          error: (message) => Swal.fire("Alerta", message, "warning")
         });
       }
     });

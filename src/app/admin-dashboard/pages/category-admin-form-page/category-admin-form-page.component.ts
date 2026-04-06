@@ -1,5 +1,5 @@
-import { Component, effect, inject } from '@angular/core';
-import { toSignal, rxResource } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, effect, inject } from '@angular/core';
+import { toSignal, rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -15,10 +15,11 @@ import { Category } from '../../../categories/interfaces/category.interface';
   imports: [ReactiveFormsModule, FormErrorLabelComponent,RouterLink]
 })
 export class CategoryAdminFormPageComponent {
+  private destroyRef = inject(DestroyRef);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private service = inject(CategoryService)
   fb = inject(FormBuilder);
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  service = inject(CategoryService)
 
   effects = effect(() => {
     const category = this.categoryResource.value();
@@ -64,7 +65,9 @@ export class CategoryAdminFormPageComponent {
 
     const request = (category.id && category.id > 0) ? this.service.update(category) : this.service.save(category);
 
-    request.subscribe({
+    request.pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
       next: (response) => {
         Swal.fire({
           title: "Categoria guardada!",

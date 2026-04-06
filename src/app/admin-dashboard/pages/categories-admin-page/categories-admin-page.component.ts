@@ -1,6 +1,6 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { CategoryService } from '../../../categories/services/category.service';
-import { rxResource } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { delay, catchError, of } from 'rxjs';
 import Swal from 'sweetalert2';
 import { Category } from '../../../categories/interfaces/category.interface';
@@ -8,18 +8,20 @@ import { PaginatorService } from '../../../shared/components/paginator/paginator
 import { CategoriesTableComponent } from "../../../categories/categories-table/categories-table.component";
 import { PaginatorComponent } from "../../../shared/components/paginator/paginator.component";
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin-filter-bar.component";
 
 @Component({
   selector: 'app-categories-admin-page',
   templateUrl: './categories-admin-page.component.html',
   styleUrls: ['./categories-admin-page.component.css'],
-  imports: [CategoriesTableComponent, PaginatorComponent, RouterLink]
+  imports: [CategoriesTableComponent, PaginatorComponent, RouterLink, AdminFilterBarComponent]
 })
 export class CategoriesAdminPageComponent {
+  private destroyRef = inject(DestroyRef);
   private service = inject(CategoryService);
-  paginatorService = inject(PaginatorService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
+  private paginatorService = inject(PaginatorService);
+  searchByNameResult = signal<string>('');
+  filterSelection = signal<string>('1');
 
   effects = effect(() => {
     const resource = this.categoriesResource.value();
@@ -29,10 +31,17 @@ export class CategoriesAdminPageComponent {
   });
 
   categoriesResource = rxResource({
-    params: () => ({ page: this.paginatorService.currentPage() - 1 }),
+    params: () => ({
+      page: this.paginatorService.currentPage() - 1,
+      name: this.searchByNameResult(),
+      activeSelection: this.filterSelection()
+    }),
     stream: ({ params }) => {
-      let page = params.page;
-      return this.service.findAll({ page: page }).pipe(
+      return this.service.findAllByFilters({
+        page: params.page,
+        name: params.name,
+        activeSelection: params.activeSelection
+      }).pipe(
         delay(500),
       );
     }
@@ -54,7 +63,9 @@ export class CategoriesAdminPageComponent {
       confirmButtonText: `Sí, ${text}!`
     }).then((result) => {
       if (result.isConfirmed) {
-        request.subscribe({
+        request.pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
           next: () => {
             Swal.fire({
               title: "Aviso!",

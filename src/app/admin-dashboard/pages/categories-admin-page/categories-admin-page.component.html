@@ -1,22 +1,35 @@
 <section class="">
   <h1 class="text-4xl text-center my-10">Lista de Categorias</h1>
-  <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Categoria</a>
 
+  @if (categoriesResource.value()?.totalElements!>0) {
   <div class="flex justify-center">
     <paginator [totalPages]="categoriesResource.value()?.totalPages" [currentPage]="categoriesResource.value()?.page" />
   </div>
+  }
 
+  <div class="flex justify-between mt-10">
+    <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Categoria</a>
+    <admin-filter-bar (searchByNameValueEmitter)="searchByNameResult.set($event)"
+      (filterSelectionEmitter)="filterSelection.set($event)">
+    </admin-filter-bar>
+  </div>
 
   @if (categoriesResource.isLoading()) {
   <div class=" flex justify-center h-50 ">
     <span class="loading loading-dots loading-xl "></span>
   </div>
-  } @else {
-  <categories-table [categories]="categoriesResource.value()?.content" (onDelete)="eliminarCategoria($event)"></categories-table>
-
+  }@else if (categoriesResource.value()?.content?.length==0) {
+  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron categorias</p>
   }
+  @else {
+  <categories-table [categories]="categoriesResource.value()?.content"
+    (onDelete)="eliminarCategoria($event)"></categories-table>
+  }
+
+  @if (categoriesResource.value()?.totalElements!>0) {
   <div class="flex justify-center">
     <paginator [totalPages]="categoriesResource.value()?.totalPages" [currentPage]="categoriesResource.value()?.page" />
   </div>
+  }
 
 </section>

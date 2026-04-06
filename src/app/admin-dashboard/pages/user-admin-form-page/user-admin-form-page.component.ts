@@ -1,5 +1,5 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
-import { toSignal, rxResource } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, effect, inject, OnInit } from '@angular/core';
+import { toSignal, rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
@@ -15,11 +15,11 @@ import { FormErrorLabelComponent } from "../../../shared/components/form-error-l
   imports: [ReactiveFormsModule, RouterLink, FormErrorLabelComponent]
 })
 export class UserAdminFormPageComponent {
-
+  private destroyRef = inject(DestroyRef);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private service = inject(UserService)
   fb = inject(FormBuilder);
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  service = inject(UserService)
 
   effects = effect(() => {
     const user = this.userResource.value();
@@ -68,7 +68,9 @@ export class UserAdminFormPageComponent {
 
     const request = (user.id && user.id > 0) ? this.service.update(user) : this.service.save(user);
 
-    request.subscribe({
+    request.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: (response) => {
         Swal.fire({
           title: "Usuario guardado!",

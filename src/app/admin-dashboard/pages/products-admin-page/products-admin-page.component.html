@@ -1,4 +1,4 @@
-<section class="flex flex-col  flex-1">
+<section class="flex flex-col flex-1">
   <h1 class="text-4xl text-center my-10">Lista de Productos</h1>
 
 
@@ -17,7 +17,7 @@
     <admin-filter-bar (searchByNameValueEmitter)="searchByNameResult.set($event)"
       (filterSelectionEmitter)="filterSelection.set($event)">
     </admin-filter-bar>
-   
+
   </div>
 
   @if (productsResource.isLoading()) {
@@ -25,8 +25,8 @@
     <span class="loading loading-dots loading-xl "></span>
   </div>
   } @else if (productsResource.value()?.content?.length==0) {
-  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron productos
-  </p>
+    <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron productos
+    </p>
   }
   @else {
   <div class="flex-1">

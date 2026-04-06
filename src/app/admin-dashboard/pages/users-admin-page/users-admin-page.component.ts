@@ -1,7 +1,7 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { User } from '../../../users/interfaces/user.interface';
-import { rxResource } from '@angular/core/rxjs-interop';
-import { delay,debounceTime, distinctUntilChanged } from 'rxjs';
+import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { delay, debounceTime, distinctUntilChanged } from 'rxjs';
 import Swal from 'sweetalert2';
 import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
 import { UserService } from '../../../users/services/user.service';
@@ -17,17 +17,19 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   imports: [PaginatorComponent, UsersTableComponent, RouterLink, ReactiveFormsModule]
 })
 export class UsersAdminPageComponent {
+  private destroyRef = inject(DestroyRef);
   private service = inject(UserService);
-  paginatorService = inject(PaginatorService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
+  private paginatorService = inject(PaginatorService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   searchByInput = new FormControl<string>('');
   searchByValue = signal<string>('');
 
   constructor() {
     this.searchByInput.valueChanges.pipe(
       debounceTime(1000),
-      distinctUntilChanged())
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef))
       .subscribe(value => {
         this.searchByValue.set(value!.trim());
 
@@ -73,7 +75,9 @@ export class UsersAdminPageComponent {
       confirmButtonText: `Sí, ${text}!`
     }).then((result) => {
       if (result.isConfirmed) {
-        request.subscribe({
+        request.pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
           next: () => {
             Swal.fire({
               title: "Aviso!",

@@ -1,14 +1,14 @@
 import { PaginatorService } from './../../../shared/components/paginator/paginator.service';
 import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { ProductsTableComponent } from '../../../products/components/products-table/products-table.component';
-import { rxResource } from '@angular/core/rxjs-interop';
-import { delay} from 'rxjs';
+import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { delay } from 'rxjs';
 import { ProductService } from '../../../products/services/product.service';
 import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Product } from '../../../products/interfaces/product.interface';
-import {  ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin-filter-bar.component";
 
 @Component({
@@ -17,13 +17,10 @@ import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin
   styleUrls: ['./products-admin-page.component.css'],
   imports: [ProductsTableComponent, PaginatorComponent, RouterLink, ReactiveFormsModule, AdminFilterBarComponent]
 })
-export class ProductsAdminPageComponent{
-
+export class ProductsAdminPageComponent {
   private destroyRef = inject(DestroyRef);
   private service = inject(ProductService);
-  paginatorService = inject(PaginatorService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
+  private paginatorService = inject(PaginatorService);
   searchByNameResult = signal<string>('');
   filterSelection = signal<string>('1');
 
@@ -70,7 +67,9 @@ export class ProductsAdminPageComponent{
       confirmButtonText: `Sí, ${text}!`
     }).then((result) => {
       if (result.isConfirmed) {
-        request.subscribe({
+        request.pipe(
+          takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
           next: () => {
             Swal.fire({
               title: "Aviso!",
