@@ -63,7 +63,7 @@ export class CommonService<E extends BaseEntity> {
 
     return this.http.get<PageResponse<E>>(`${this.urlApi}/by-filters`, {
       params: {
-        page, size, name, activeSelection
+        page, size, name:name.trim(), activeSelection
       }
     }).pipe(
       tap(response => {
