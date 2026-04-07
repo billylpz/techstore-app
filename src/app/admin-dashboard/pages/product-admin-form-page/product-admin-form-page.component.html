@@ -12,14 +12,14 @@
 
     <div>
       <label class="block text-sm font-medium text-gray-400 mb-2">Descripción</label>
-      <textarea formControlName="description" rows="3"
+      <textarea formControlName="description" rows="10" 
         class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"></textarea>
       <form-error-label [control]="myForm.get('description')!" />
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
-        <label class="block text-sm font-medium text-gray-400 mb-2">Precio ($)</label>
+        <label class="block text-sm font-medium text-gray-400 mb-2">Precio (S/.)</label>
         <input type="number" formControlName="price"
           class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 outline-none">
         <form-error-label [control]="myForm.get('price')!" />
