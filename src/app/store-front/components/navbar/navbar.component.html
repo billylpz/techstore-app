@@ -1,15 +1,37 @@
-<nav class="flex px-10 py-5 gap-5 bg-blue-600 text-white text-lg justify-between items-center">
+<nav class="flex px-15 py-5 gap-5 bg-blue-600 text-white text-lg justify-between items-center ">
   <a class="text-4xl" routerLink="">TechStore</a>
 
-  <div class=" flex gap-5">
-    <a>xxxxxxx</a>
-    <a>xxxxxxx</a>
-    <a>xxxxxxx</a>
-    <a>xxxxxxx</a>
-    <a>xxxxxxx</a>
-  </div>
+  <label class="input bg-white">
+    <svg class="h-[1em] opacity-50 text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.3-4.3"></path>
+      </g>
+    </svg>
+    <input type="search" required placeholder="Buscar" class="text-gray-500" [formControl]="searchBy" />
+  </label>
 
   <div>
     <a routerLink="/auth/login">Login</a>
   </div>
+</nav>
+
+<nav class="flex gap-15 bg-white text-black px-15 border border-blue-400">
+  <select class=" bg-white w-35" (change)="onChangeCategory(selectCategory.value)" #selectCategory>
+    <option [value]="" selected>Categorias</option>
+
+    @for (category of categoriesResource.value()?.content; track category.id) {
+      <option [value]="category.id" >{{category.name}}</option>
+    }
+  </select>
+
+
+  <select class=" bg-white w-35" (change)="onChangeBrand(selectBrand.value)" #selectBrand>
+    <option [value]="" selected>Marcas</option>
+
+    @for (brand of brandsResource.value()?.content; track brand.id) {
+      <option [value]="brand.id" >{{brand.name}}</option>
+    }
+  </select>
+
 </nav>

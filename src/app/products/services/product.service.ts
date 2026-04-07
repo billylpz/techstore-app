@@ -1,10 +1,13 @@
 import { Product } from '../interfaces/product.interface';
 import { Injectable } from '@angular/core';
-import { CommonService, PageOptions, SearchByOptions } from '../../shared/services/common.service';
-import { delay, Observable, of, tap } from 'rxjs';
+import { CommonService, SearchByOptions } from '../../shared/services/common.service';
+import { Observable, tap } from 'rxjs';
 import { PageResponse } from '../../shared/interfaces/page-response.interface';
 
-
+export interface SearchProductsOptions extends SearchByOptions {
+  categoryId?: string,
+  brandId?: string,
+}
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +17,11 @@ export class ProductService extends CommonService<Product> {
     super("/api/products")
   }
 
-  findAllByNameOnlyActive(options: SearchByOptions): Observable<PageResponse<Product>> {
-    const { page = 0, size = 5 ,name='' } = options;
+  findAllByFilterOnlyActive(options: SearchProductsOptions): Observable<PageResponse<Product>> {
+    const { name = '', categoryId = '', brandId = '' } = options;
 
-    return this.http.get<PageResponse<Product>>(`${this.urlApi}/by-name-active`, {
-      params: {page, size, name}
+    return this.http.get<PageResponse<Product>>(`${this.urlApi}/by-filter-active`, {
+      params: { name, categoryId, brandId }
     });
   }
 
