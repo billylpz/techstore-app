@@ -10,12 +10,13 @@ import Swal from 'sweetalert2';
 import { Product } from '../../../products/interfaces/product.interface';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin-filter-bar.component";
+import { LoadingDotsComponent } from "../../../shared/components/loading-dots/loading-dots.component";
 
 @Component({
   selector: 'app-products-admin-page',
   templateUrl: './products-admin-page.component.html',
   styleUrls: ['./products-admin-page.component.css'],
-  imports: [ProductsTableComponent, PaginatorComponent, RouterLink, ReactiveFormsModule, AdminFilterBarComponent]
+  imports: [ProductsTableComponent, PaginatorComponent, RouterLink, ReactiveFormsModule, AdminFilterBarComponent, LoadingDotsComponent]
 })
 export class ProductsAdminPageComponent {
   private destroyRef = inject(DestroyRef);

@@ -87,7 +87,7 @@ export class ProductAdminFormPageComponent {
   //categorias desde service
   categoriesResource = rxResource({
     params: () => ({}),
-    stream: ({ }) => this.categoryService.findAll({}).pipe(map(response => response.content))
+    stream: ({ }) => this.categoryService.findAll({page: 0, size: 100}).pipe(map(response => response.content))
   });
 
 

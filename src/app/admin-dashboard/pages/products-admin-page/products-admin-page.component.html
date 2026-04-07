@@ -21,9 +21,7 @@
   </div>
 
   @if (productsResource.isLoading()) {
-  <div class=" flex justify-center h-50 ">
-    <span class="loading loading-dots loading-xl "></span>
-  </div>
+    <loading-dots></loading-dots>
   } @else if (productsResource.value()?.content?.length==0) {
     <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron productos
     </p>
