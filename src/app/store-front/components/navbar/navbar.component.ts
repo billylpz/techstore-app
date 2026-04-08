@@ -1,8 +1,8 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import {  Router, RouterLink } from '@angular/router';
-import { debounceTime, distinctUntilChanged, merge } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { CategoryService } from '../../../categories/services/category.service';
 import { BrandService } from '../../../brands/services/brand.service';
 
@@ -19,8 +19,10 @@ export class NavbarComponent implements OnInit {
   private brandService = inject(BrandService);
   private router = inject(Router);
   private selectedCategory = signal<string>('');
-  private selectedBrand= signal<string>('');
+  private selectedBrand = signal<string>('');
   searchBy = this.fb.control('');
+  brandSelect = this.fb.control('')
+  categorySelect = this.fb.control('')
 
   ngOnInit(): void {
     this.searchBy.valueChanges.pipe(
@@ -28,10 +30,31 @@ export class NavbarComponent implements OnInit {
       distinctUntilChanged(),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(value => {
-      this.router.navigate([], { 
+      this.router.navigate([''], {
         queryParams: { name: value },
-      })
+      });
+      this.searchBy.setValue('',{emitEvent:false})
     });
+
+    this.brandSelect.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.selectedBrand.set(value ?? '');
+        this.router.navigate([''], {
+          queryParams: { brandId: this.selectedBrand() },
+        })
+        this.brandSelect.setValue('', { emitEvent: false })
+      });
+
+    this.categorySelect.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(value => {
+        this.selectedCategory.set(value ?? '');
+        this.router.navigate([''], {
+          queryParams: { categoryId: this.selectedCategory() },
+        });
+        this.categorySelect.setValue('', { emitEvent: false })
+      })
 
   }
 
@@ -49,17 +72,4 @@ export class NavbarComponent implements OnInit {
     }
   });
 
-  onChangeCategory(value:string){
-    this.selectedCategory.set(value);
-    this.router.navigate([''], { 
-      queryParams: { categoryId: this.selectedCategory()},
-    })
-  } 
-
-   onChangeBrand(value:string){
-    this.selectedBrand.set(value);
-    this.router.navigate([''], { 
-      queryParams: { brandId: this.selectedBrand()},
-    })
-  } 
 }

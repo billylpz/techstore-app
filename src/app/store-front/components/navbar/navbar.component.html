@@ -17,20 +17,22 @@
 </nav>
 
 <nav class="flex gap-15 bg-white text-black px-15 border border-blue-400">
-  <select class=" bg-white w-35" (change)="onChangeCategory(selectCategory.value)" #selectCategory>
-    <option [value]="" selected>Categorias</option>
+  <select class=" bg-white w-35" [formControl]="categorySelect">
+    <option [value]="''" selected disabled>Categorias</option>
+    <option [value]="''" >--Todos--</option>
 
     @for (category of categoriesResource.value()?.content; track category.id) {
-      <option [value]="category.id" >{{category.name}}</option>
+    <option [value]="category.id">{{category.name}}</option>
     }
   </select>
 
 
-  <select class=" bg-white w-35" (change)="onChangeBrand(selectBrand.value)" #selectBrand>
-    <option [value]="" selected>Marcas</option>
+  <select class=" bg-white w-35" [formControl]="brandSelect">
+    <option [value]="''" selected disabled>Marcas</option>
+    <option [value]="''" >--Todos--</option>
 
     @for (brand of brandsResource.value()?.content; track brand.id) {
-      <option [value]="brand.id" >{{brand.name}}</option>
+    <option [value]="brand.id">{{brand.name}}</option>
     }
   </select>
 
