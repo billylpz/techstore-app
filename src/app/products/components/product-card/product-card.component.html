@@ -1,13 +1,14 @@
 <div class="card bg-white w-70 shadow-sm">
-  <figure class="px-10 pt-10">
-    <img [src]="product()?.images![0].imageUrl" alt="Shoes"
-      class="rounded-xl" />
-  </figure>
-  <div class="card-body items-center text-center">
-    <h2 class="card-title hover:text-blue-700 line-clamp-2">{{product()?.name}}</h2>
-    <p class="text-xl text-blue-700 font-bold">S/. {{product()?.price}}</p>
-    <div class="card-actions">
-      <button class="btn btn-primary">Añadir al carro</button>
+  <a class=" cursor-pointer" [routerLink]="['/product-details',product()?.id]">
+    <figure class="px-10 pt-10">
+      <img [src]="product()?.images![0].imageUrl" alt="" class="rounded-xl" />
+    </figure>
+    <div class="card-body items-center text-center">
+      <h2 class="card-title hover:text-blue-700 line-clamp-2">{{product()?.name}}</h2>
+      <p class="text-xl text-blue-700 font-bold">S/. {{product()?.price | number:'1.2-2'}}</p>
     </div>
+  </a>
+  <div class="card-body items-center">
+    <button class="btn btn-primary">Añadir al carro</button>
   </div>
 </div>
