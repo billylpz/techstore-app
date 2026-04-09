@@ -11,15 +11,21 @@
     <input type="search" required placeholder="Buscar" class="text-gray-500" [formControl]="searchBy" />
   </label>
 
-  <div>
-    <a routerLink="/auth/login">Login</a>
+  <div class="flex gap-15 items-center">
+    <div class="flex items-center cursor-pointer" (click)="toggleCart()">
+      <fa-icon [icon]="faCartShopping" />
+      <span class="text-sm">({{cartService.items().length}})</span>
+    </div>
+    <a routerLink="/auth/login" class="text-lg">Login</a>
   </div>
 </nav>
+
+
 
 <nav class="flex gap-15 bg-white text-black px-15 border border-blue-400">
   <select class=" bg-white w-35" [formControl]="categorySelect">
     <option [value]="''" selected disabled>Categorias</option>
-    <option [value]="''" >--Todos--</option>
+    <option [value]="''">--Todos--</option>
 
     @for (category of categoriesResource.value()?.content; track category.id) {
     <option [value]="category.id">{{category.name}}</option>
@@ -29,7 +35,7 @@
 
   <select class=" bg-white w-35" [formControl]="brandSelect">
     <option [value]="''" selected disabled>Marcas</option>
-    <option [value]="''" >--Todos--</option>
+    <option [value]="''">--Todos--</option>
 
     @for (brand of brandsResource.value()?.content; track brand.id) {
     <option [value]="brand.id">{{brand.name}}</option>
@@ -37,3 +43,7 @@
   </select>
 
 </nav>
+
+
+<!-- cart modal-->
+<cart-modal [isOpen]="openCart()" (close)="toggleCart()"></cart-modal>

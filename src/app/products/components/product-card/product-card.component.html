@@ -1,4 +1,4 @@
-<div class="card bg-white w-70 shadow-sm">
+<div class="card bg-white w-70 shadow-sm z-10">
   <a class=" cursor-pointer" [routerLink]="['/product-details',product()?.id]">
     <figure class="px-10 pt-10">
       <img [src]="product()?.images![0].imageUrl" alt="" class="rounded-xl" />
@@ -9,6 +9,10 @@
     </div>
   </a>
   <div class="card-body items-center">
-    <button class="btn btn-primary">Añadir al carro</button>
+    <button type="button" class="btn btn-primary" (click)="onAddToCart(product()!)">Añadir al carrito</button>
   </div>
 </div>
+
+@if (addToCartToast()) {
+  <cart-toast></cart-toast>
+} 

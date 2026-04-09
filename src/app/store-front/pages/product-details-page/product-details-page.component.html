@@ -12,14 +12,18 @@
       </p>
 
       <section class="flex gap-10 items-center">
-        <div class="flex justify-between border border-gray-500 p-3 gap-10 items-center rounded-sm">
-          <button type="button" class="text-xl cursor-pointer "> - </button>
-          <span class="text-xl">cant</span>
-          <button type="button" class="text-xl cursor-pointer"> + </button>
+        <div class="flex flex-col ">
+          <div class="flex justify-between border border-gray-500 p-3 gap-10 items-center rounded-sm">
+            <button type="button" class="text-xl cursor-pointer " (click)="onDecrement()"> - </button>
+            <input type="text" class="text-xl w-10 text-center focus:outline-none" [formControl]="quantityInput"
+              #inputQty (focus)="inputQty.select()">
+            <button type="button" class="text-xl cursor-pointer" (click)="onIncrement()"> + </button>
+          </div>
+          <span class="text-red-400 text-xs  text-center">max 50</span>
         </div>
 
         <button type="button" class="px-3 py-1 bg-blue-600 text-white font-semibold text-xl 
-          cursor-pointer rounded-sm">Añadir al carrito
+          cursor-pointer rounded-sm" (click)="onAddToCart(productResource.value()!)">Añadir al carrito
         </button>
       </section>
     </section>
@@ -33,3 +37,7 @@
     </p>
   </section>
 </div>
+
+@if (addToCartToast()) {
+  <cart-toast></cart-toast>
+} 
