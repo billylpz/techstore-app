@@ -22,6 +22,12 @@ export class TokenService {
     return jwtDecode(token);
   }
 
+  getId(): number | null {
+    if (!this.getPayload()) return null;
+    const payload: any = this.getPayload();
+    return payload.id;
+  }
+
   isAuthenticated(): boolean {
     const token = this.getToken();
     return !token ? false : true;

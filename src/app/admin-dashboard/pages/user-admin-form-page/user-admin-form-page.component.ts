@@ -1,3 +1,4 @@
+import { TokenService } from './../../../auth/jwt/token.service';
 import { Component, DestroyRef, effect, inject, OnInit } from '@angular/core';
 import { toSignal, rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,12 +15,33 @@ import { FormErrorLabelComponent } from "../../../shared/components/form-error-l
   styleUrls: ['./user-admin-form-page.component.css'],
   imports: [ReactiveFormsModule, RouterLink, FormErrorLabelComponent]
 })
-export class UserAdminFormPageComponent {
+export class UserAdminFormPageComponent implements OnInit {
+
   private destroyRef = inject(DestroyRef);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private service = inject(UserService)
+  private tokenService = inject(TokenService)
   fb = inject(FormBuilder);
+
+  ngOnInit(): void {
+    let isFirstAlert = true;
+
+    this.myForm.get('username')?.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(() => {
+      if (isFirstAlert) {
+        if (this.myForm.get("id")?.value != null && (this.myForm.get("id")?.value == this.tokenService.getId())) {
+          Swal.fire({
+            title: "Aviso",
+            text: "Si modificas tu username, tu sesión se cerrará y serás redirigido al login.",
+            icon: "info",
+          });
+        }
+        isFirstAlert = false;
+      }
+    })
+  }
 
   effects = effect(() => {
     const user = this.userResource.value();
@@ -65,7 +87,6 @@ export class UserAdminFormPageComponent {
     }
 
     const user = this.myForm.value as User
-
     const request = (user.id && user.id > 0) ? this.service.update(user) : this.service.save(user);
 
     request.pipe(
@@ -74,11 +95,16 @@ export class UserAdminFormPageComponent {
       next: (response) => {
         Swal.fire({
           title: "Usuario guardado!",
-          text: `${response.name}`,
+          text: `Nombres: ${response.name} ${response.lastname}`,
           icon: "success"
+        }).then(() => {
+          if (response.username != this.tokenService.getSubject()) {
+            this.tokenService.clean();
+            this.router.navigate(['/auth/login']);
+          } else {
+            this.router.navigate(['/admin/users']);
+          }
         });
-
-        this.router.navigate(['/admin/users']);
       }
     });
   }

@@ -1,7 +1,7 @@
 import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
 import { User } from '../../../users/interfaces/user.interface';
 import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { delay, debounceTime, distinctUntilChanged } from 'rxjs';
+import { delay, debounceTime, distinctUntilChanged, tap } from 'rxjs';
 import Swal from 'sweetalert2';
 import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
 import { UserService } from '../../../users/services/user.service';
@@ -9,6 +9,7 @@ import { PaginatorComponent } from "../../../shared/components/paginator/paginat
 import { UsersTableComponent } from "../../../users/components/users-table/users-table.component";
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { TokenService } from '../../../auth/jwt/token.service';
 
 @Component({
   selector: 'app-users-admin-page',
@@ -22,6 +23,7 @@ export class UsersAdminPageComponent {
   private paginatorService = inject(PaginatorService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private tokenService = inject(TokenService);
   searchByInput = new FormControl<string>('');
   searchByValue = signal<string>('');
 
@@ -54,7 +56,10 @@ export class UsersAdminPageComponent {
         );
       }
       return this.service.findAll({ page: page }).pipe(
-        delay(500)
+        delay(500),
+        tap(pageContent => {
+          pageContent.content = pageContent.content.filter(u => u.id != this.tokenService.getId())
+        })
       );
     }
   });
