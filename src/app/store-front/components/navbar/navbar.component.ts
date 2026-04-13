@@ -9,6 +9,7 @@ import { CartService } from '../../../cart/services/cart.service';
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons';
 import { CartModalComponent } from "../../../cart/components/cart-modal/cart-modal.component";
+import { TokenService } from '../../../auth/jwt/token.service';
 
 @Component({
   selector: 'navbar',
@@ -24,6 +25,7 @@ export class NavbarComponent implements OnInit {
   private router = inject(Router);
   private selectedCategory = signal<string>('');
   private selectedBrand = signal<string>('');
+  tokenService = inject(TokenService);
   cartService = inject(CartService);
   searchBy = this.fb.control('');
   brandSelect = this.fb.control('')
@@ -80,5 +82,10 @@ export class NavbarComponent implements OnInit {
 
   toggleCart() {
     this.openCart.update(v => !v);
+  }
+
+  logOut(): void {
+    this.tokenService.clean();
+    this.router.navigate([''])
   }
 }

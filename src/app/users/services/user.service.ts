@@ -3,12 +3,13 @@ import { CommonService, PageOptions, SearchByOptions } from '../../shared/servic
 import { User } from '../interfaces/user.interface';
 import { PageResponse } from '../../shared/interfaces/page-response.interface';
 import { Observable } from 'rxjs';
+import { PasswordChangeRequest } from '../interfaces/password-change-request.interface';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService extends CommonService<User> {
-
   constructor() {
     super("/api/users")
   }
@@ -31,5 +32,9 @@ export class UserService extends CommonService<User> {
         page, size
       }
     });
+  }
+
+  changePassword(request: PasswordChangeRequest): Observable<void> {
+    return this.http.patch<void>(`${this.urlApi}/change-password`,request);
   }
 }

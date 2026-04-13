@@ -16,7 +16,27 @@
       <fa-icon [icon]="faCartShopping" />
       <span class="text-sm">({{cartService.items().length}})</span>
     </div>
-    <a routerLink="/auth/login" class="text-lg">Login</a>
+
+    @if (tokenService.getPayload()) {
+
+    <div class="flex items-center">
+      <span class="text-sm">Bienvenido: </span>
+      <ul class="menu menu-horizontal px-1">
+        <li>
+          <details>
+            <summary><span class=""> {{tokenService.getSubject()}}</span></summary>
+            <ul class="p-2 bg-white text-black w-30 z-1 -translate-x-1/2 text-xs">
+              <li><a [routerLink]="['/edit-profile/',tokenService.getId()]">Editar mi perfil</a></li>
+              <li><button type="button" (click)="logOut()">Cerrar sesión</button></li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </div>
+
+    } @else {
+    <a routerLink="/auth/login" class="text-sm">Login</a>
+    }
   </div>
 </nav>
 
