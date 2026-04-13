@@ -13,6 +13,18 @@ export class CartService {
   private cartItems = signal<CartItem[]>([]);
   items = this.cartItems.asReadonly();
 
+  constructor() {
+    let shoppingCart = JSON.parse(sessionStorage.getItem("shopping-cart") ?? '[]') as CartItem[];
+
+    if (shoppingCart.length > 0) {
+      this.cartItems.update(() => shoppingCart);
+    }
+  }
+
+  saveCartToSession(items: CartItem[]) {
+    sessionStorage.setItem("shopping-cart", JSON.stringify(items));
+  }
+
   addItem(item: CartItem): void {
     this.cartItems.update(items => {
       const existingItem = items.find(i => i.product.id == item.product.id);
@@ -24,6 +36,8 @@ export class CartService {
       return [...items, item];
     });
 
+    this.saveCartToSession(this.cartItems());
+
   }
 
 
@@ -31,6 +45,7 @@ export class CartService {
     this.cartItems.update(items => {
       return items.filter(i => i.product.id != item.product.id);
     });
+    this.saveCartToSession(this.cartItems());
   }
 
   increment(item: CartItem): void {
@@ -38,6 +53,7 @@ export class CartService {
       return;
     }
     item.quantity += 1
+    this.saveCartToSession(this.cartItems());
   }
 
   decrement(item: CartItem): void {
@@ -45,9 +61,11 @@ export class CartService {
       this.cartItems.update(items => {
         return items.filter(i => i.product.id != item.product.id);
       });
+      this.saveCartToSession(this.cartItems());
       return;
     }
     item.quantity -= 1
+    this.saveCartToSession(this.cartItems());
   }
 
 
