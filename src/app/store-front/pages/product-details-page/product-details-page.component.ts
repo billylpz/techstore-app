@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, effect, inject, OnInit, signal } from '@angular/core';
 import { ProductService } from '../../../products/services/product.service';
 import { rxResource, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
@@ -8,6 +8,7 @@ import { CartItem, CartService } from '../../../cart/services/cart.service';
 import { Product } from '../../../products/interfaces/product.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CartToastComponent } from "../../../cart/components/cart-toast/cart-toast.component";
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product-details-page',
@@ -18,6 +19,7 @@ import { CartToastComponent } from "../../../cart/components/cart-toast/cart-toa
 export class ProductDetailsPageComponent implements OnInit {
   private productService = inject(ProductService);
   private route = inject(ActivatedRoute);
+  private titleService = inject(Title);
   quantity = signal(1);
   cartService = inject(CartService);
   quantityInput = new FormControl(1)
@@ -33,6 +35,14 @@ export class ProductDetailsPageComponent implements OnInit {
       this.quantity.set(value);
     })
   }
+
+  titleEffects = effect(() => {
+    if(this.productResource.isLoading()){
+      this.titleService.setTitle(`Cargando producto... | TechStore`)
+    }else{
+      this.titleService.setTitle(`${this.productResource.value()?.name} | TechStore`)
+    }
+  });
 
   productId = toSignal(this.route.paramMap.pipe(map(params => {
     let id = params.get('id') ?? '1';
