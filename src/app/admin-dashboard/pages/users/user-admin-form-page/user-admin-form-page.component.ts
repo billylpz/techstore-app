@@ -1,13 +1,14 @@
-import { TokenService } from './../../../auth/jwt/token.service';
-import { Component, DestroyRef, effect, inject, OnInit } from '@angular/core';
-import { toSignal, rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { map } from 'rxjs';
-import Swal from 'sweetalert2';
-import { User } from '../../../users/interfaces/user.interface';
-import { UserService } from '../../../users/services/user.service';
-import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
+import { Component, OnInit, inject, DestroyRef, effect } from "@angular/core";
+import { takeUntilDestroyed, toSignal, rxResource } from "@angular/core/rxjs-interop";
+import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
+import { RouterLink, ActivatedRoute, Router } from "@angular/router";
+import { map } from "rxjs";
+import Swal from "sweetalert2";
+import { TokenService } from "../../../../auth/jwt/token.service";
+import { FormErrorLabelComponent } from "../../../../shared/components/form-error-label/form-error-label.component";
+import { User } from "../../../../users/interfaces/user.interface";
+import { UserService } from "../../../../users/services/user.service";
+
 
 @Component({
   selector: 'app-user-admin-form-page',
@@ -21,7 +22,7 @@ export class UserAdminFormPageComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private service = inject(UserService)
-  private tokenService = inject(TokenService)
+  tokenService = inject(TokenService)
   fb = inject(FormBuilder);
 
   ngOnInit(): void {
@@ -75,8 +76,8 @@ export class UserAdminFormPageComponent implements OnInit {
     id: this.fb.control<number | null>(null),
     name: ['', [Validators.required, Validators.minLength(2)]],
     lastname: ['', [Validators.required, Validators.minLength(2)]],
-    email: ['', [Validators.required, Validators.email, Validators.minLength(2)]],
-    username: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required, Validators.minLength(5)]],
   })
 
   onSubmit() {

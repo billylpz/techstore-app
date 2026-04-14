@@ -1,15 +1,16 @@
-import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
-import { User } from '../../../users/interfaces/user.interface';
-import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { delay, debounceTime, distinctUntilChanged, tap } from 'rxjs';
-import Swal from 'sweetalert2';
-import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
-import { UserService } from '../../../users/services/user.service';
-import { PaginatorComponent } from "../../../shared/components/paginator/paginator.component";
-import { UsersTableComponent } from "../../../users/components/users-table/users-table.component";
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { TokenService } from '../../../auth/jwt/token.service';
+import { Component, inject, DestroyRef, signal } from "@angular/core";
+import { takeUntilDestroyed, rxResource } from "@angular/core/rxjs-interop";
+import { ReactiveFormsModule, FormControl } from "@angular/forms";
+import { RouterLink, Router, ActivatedRoute } from "@angular/router";
+import { debounceTime, distinctUntilChanged, delay, tap } from "rxjs";
+import Swal from "sweetalert2";
+import { TokenService } from "../../../../auth/jwt/token.service";
+import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
+import { PaginatorService } from "../../../../shared/components/paginator/paginator.service";
+import { UsersTableComponent } from "../../../../users/components/users-table/users-table.component";
+import { User } from "../../../../users/interfaces/user.interface";
+import { UserService } from "../../../../users/services/user.service";
+
 
 @Component({
   selector: 'app-users-admin-page',

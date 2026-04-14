@@ -1,0 +1,50 @@
+<div class="max-w-4xl mx-auto mt-10 p-8 bg-gray-900 rounded-xl shadow-lg border border-gray-800">
+  <h2 class="text-2xl font-bold text-white mb-6">Registro de Usuario</h2>
+
+  <form [formGroup]="myForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+    <div>
+      <label class="block text-sm font-medium text-gray-400 mb-2">Nombre</label>
+      <input type="text" formControlName="name"
+        class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+      <form-error-label [control]="myForm.get('name')!" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-400 mb-2">Apellido</label>
+      <input type="text" formControlName="lastname"
+        class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+      <form-error-label [control]="myForm.get('lastname')!" />
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-400 mb-2">Username</label>
+      <input type="text" formControlName="username"
+        class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+      <form-error-label [control]="myForm.get('username')!" />
+    </div>
+    
+     <div>
+      <label class="block text-sm font-medium text-gray-400 mb-2">Email</label>
+      <input type="text" formControlName="email"
+        class="w-full bg-gray-800 border border-gray-700 text-white rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+      <form-error-label [control]="myForm.get('email')!" />
+    </div>
+
+    @if (this.myForm.get("id")?.value == tokenService.getId()) {
+      <a class="text-sm text-blue-500" routerLink="../../edit-password">Cambiar contraseña</a> 
+    } 
+
+    <div class="pt-4  flex gap-10 justify-center">
+      <button type="button" routerLink="/admin/users" class="w-fit bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300
+          cursor-pointer">
+        Volver
+      </button>
+      <button type="submit" [disabled]="myForm.invalid" class="w-fit bg-red-600 hover:bg-red-700 disabled:bg-gray-700 disabled:text-gray-500
+         text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300 cursor-pointer">
+        Guardar Usuario
+      </button>
+    </div>
+
+  </form>
+</div>

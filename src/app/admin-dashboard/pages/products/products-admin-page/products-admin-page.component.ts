@@ -1,16 +1,17 @@
-import { PaginatorService } from './../../../shared/components/paginator/paginator.service';
-import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
-import { ProductsTableComponent } from '../../../products/components/products-table/products-table.component';
-import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { delay } from 'rxjs';
-import { ProductService } from '../../../products/services/product.service';
-import { PaginatorComponent } from '../../../shared/components/paginator/paginator.component';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import Swal from 'sweetalert2';
-import { Product } from '../../../products/interfaces/product.interface';
-import { ReactiveFormsModule } from '@angular/forms';
-import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin-filter-bar.component";
-import { LoadingDotsComponent } from "../../../shared/components/loading-dots/loading-dots.component";
+import { Component, inject, DestroyRef, signal, effect } from "@angular/core";
+import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ReactiveFormsModule } from "@angular/forms";
+import { RouterLink } from "@angular/router";
+import { delay } from "rxjs";
+import Swal from "sweetalert2";
+import { ProductsTableComponent } from "../../../../products/components/products-table/products-table.component";
+import { Product } from "../../../../products/interfaces/product.interface";
+import { ProductService } from "../../../../products/services/product.service";
+import { LoadingDotsComponent } from "../../../../shared/components/loading-dots/loading-dots.component";
+import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
+import { PaginatorService } from "../../../../shared/components/paginator/paginator.service";
+import { AdminFilterBarComponent } from "../../../components/admin-filter-bar/admin-filter-bar.component";
+
 
 @Component({
   selector: 'app-products-admin-page',

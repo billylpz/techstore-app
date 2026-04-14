@@ -4,9 +4,10 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import Swal from 'sweetalert2';
-import { CategoryService } from '../../../categories/services/category.service';
-import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
-import { Category } from '../../../categories/interfaces/category.interface';
+import { Category } from '../../../../categories/interfaces/category.interface';
+import { CategoryService } from '../../../../categories/services/category.service';
+import { FormErrorLabelComponent } from '../../../../shared/components/form-error-label/form-error-label.component';
+
 
 @Component({
   selector: 'app-category-admin-form-page',

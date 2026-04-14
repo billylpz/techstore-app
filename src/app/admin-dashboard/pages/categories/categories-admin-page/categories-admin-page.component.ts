@@ -1,14 +1,15 @@
-import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
-import { CategoryService } from '../../../categories/services/category.service';
-import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { delay, catchError, of } from 'rxjs';
-import Swal from 'sweetalert2';
-import { Category } from '../../../categories/interfaces/category.interface';
-import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
-import { CategoriesTableComponent } from "../../../categories/categories-table/categories-table.component";
-import { PaginatorComponent } from "../../../shared/components/paginator/paginator.component";
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin-filter-bar.component";
+import { Component, inject, DestroyRef, signal, effect } from "@angular/core";
+import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { RouterLink } from "@angular/router";
+import { delay } from "rxjs";
+import Swal from "sweetalert2";
+import { CategoriesTableComponent } from "../../../../categories/categories-table/categories-table.component";
+import { Category } from "../../../../categories/interfaces/category.interface";
+import { CategoryService } from "../../../../categories/services/category.service";
+import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
+import { PaginatorService } from "../../../../shared/components/paginator/paginator.service";
+import { AdminFilterBarComponent } from "../../../components/admin-filter-bar/admin-filter-bar.component";
+
 
 @Component({
   selector: 'app-categories-admin-page',

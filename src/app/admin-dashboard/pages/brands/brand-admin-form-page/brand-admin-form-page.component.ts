@@ -1,18 +1,18 @@
 import { Component, DestroyRef, effect, inject} from '@angular/core';
 import { FormBuilder,  ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormErrorLabelComponent } from "../../../shared/components/form-error-label/form-error-label.component";
-import { BrandService } from '../../../brands/services/brand.service';
-import { Brand } from '../../../brands/interfaces/brand.interface';
+import { BrandService } from '../../../../brands/services/brand.service';
+import { Brand } from '../../../../brands/interfaces/brand.interface';
 import Swal from 'sweetalert2';
 import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
+import { FormErrorLabelComponent } from "../../../../shared/components/form-error-label/form-error-label.component";
 
 @Component({
-  selector: 'app-brand-admin-form-page',
+  selector: 'app-brand-admin-form-page',  
   templateUrl: './brand-admin-form-page.component.html',
   styleUrls: ['./brand-admin-form-page.component.css'],
-  imports: [ReactiveFormsModule, FormErrorLabelComponent,RouterLink]
+  imports: [ReactiveFormsModule, RouterLink, FormErrorLabelComponent]
 })
 export class BrandAdminFormPageComponent {
   private destroyRef = inject(DestroyRef);

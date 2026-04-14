@@ -1,23 +1,24 @@
-import { Category } from './../../../categories/interfaces/category.interface';
-import { ProductService } from '../../../products/services/product.service';
-import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CategoryService } from '../../../categories/services/category.service';
-import { BrandService } from '../../../brands/services/brand.service';
-import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { catchError, delay, map, of, timeout } from 'rxjs';
-import { Product } from '../../../products/interfaces/product.interface';
-import { FormErrorLabelComponent } from '../../../shared/components/form-error-label/form-error-label.component';
-import { FormUtils } from '../../../shared/utils/form-utils';
-import Swal from 'sweetalert2'
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Brand } from '../../../brands/interfaces/brand.interface';
-import { BaseEntity } from '../../../shared/interfaces/base-entity.interface';
-import { ImageUtils } from '../../../shared/utils/image-utils';
-import { SavingOverlayComponent } from "../../../shared/components/saving-overlay/saving-overlay.component";
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ProductImage } from '../../../products/interfaces/product-image.interface';
+import { Component, inject, DestroyRef, signal, effect } from "@angular/core";
+import { toSignal, rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { ReactiveFormsModule, FormBuilder, Validators } from "@angular/forms";
+import { RouterLink, ActivatedRoute, Router } from "@angular/router";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { map, catchError, of, delay } from "rxjs";
+import Swal from "sweetalert2";
+import { Brand } from "../../../../brands/interfaces/brand.interface";
+import { BrandService } from "../../../../brands/services/brand.service";
+import { Category } from "../../../../categories/interfaces/category.interface";
+import { CategoryService } from "../../../../categories/services/category.service";
+import { ProductImage } from "../../../../products/interfaces/product-image.interface";
+import { Product } from "../../../../products/interfaces/product.interface";
+import { ProductService } from "../../../../products/services/product.service";
+import { FormErrorLabelComponent } from "../../../../shared/components/form-error-label/form-error-label.component";
+import { SavingOverlayComponent } from "../../../../shared/components/saving-overlay/saving-overlay.component";
+import { BaseEntity } from "../../../../shared/interfaces/base-entity.interface";
+import { FormUtils } from "../../../../shared/utils/form-utils";
+import { ImageUtils } from "../../../../shared/utils/image-utils";
+
 @Component({
   selector: 'app-product-admin-form-page',
   templateUrl: './product-admin-form-page.component.html',

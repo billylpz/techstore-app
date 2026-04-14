@@ -1,16 +1,14 @@
-import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
-import { PaginatorComponent } from "../../../shared/components/paginator/paginator.component";
-import { ProductsTableComponent } from "../../../products/components/products-table/products-table.component";
-import { BrandsTableComponent } from "../../../brands/components/brands-table/brands-table.component";
-import { rxResource, takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { delay, catchError, of } from 'rxjs';
-import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
-import { BrandService } from '../../../brands/services/brand.service';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Brand } from '../../../brands/interfaces/brand.interface';
-import Swal from 'sweetalert2';
-import { AdminFilterBarComponent } from "../../components/admin-filter-bar/admin-filter-bar.component";
-
+import { Component, inject, DestroyRef, signal, effect } from "@angular/core";
+import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { RouterLink } from "@angular/router";
+import { delay } from "rxjs";
+import Swal from "sweetalert2";
+import { BrandsTableComponent } from "../../../../brands/components/brands-table/brands-table.component";
+import { Brand } from "../../../../brands/interfaces/brand.interface";
+import { BrandService } from "../../../../brands/services/brand.service";
+import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
+import { PaginatorService } from "../../../../shared/components/paginator/paginator.service";
+import { AdminFilterBarComponent } from "../../../components/admin-filter-bar/admin-filter-bar.component";
 
 
 @Component({
