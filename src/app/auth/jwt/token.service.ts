@@ -1,8 +1,11 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import Swal from 'sweetalert2';
 
 @Injectable({ providedIn: 'root' })
 export class TokenService {
+  private router = inject(Router);
 
   save(token: string) {
     sessionStorage.setItem("auth_token", token);
@@ -52,6 +55,12 @@ export class TokenService {
 
   getRedirectRoute(): string {
     return this.isAdmin() ? '/admin' : '';
+  }
+
+  sessionExpiredAlert() {
+    Swal.fire('Info', 'Tu sesión ha caducado, vuelve a iniciar sesión', 'info');
+    this.clean();
+    this.router.navigate(['']);
   }
 
 

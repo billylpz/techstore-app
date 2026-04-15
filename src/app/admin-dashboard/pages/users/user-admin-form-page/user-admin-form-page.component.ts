@@ -99,7 +99,7 @@ export class UserAdminFormPageComponent implements OnInit {
           text: `Nombres: ${response.name} ${response.lastname}`,
           icon: "success"
         }).then(() => {
-          if (response.username != this.tokenService.getSubject()) {
+          if ((user.id == this.tokenService.getId() && response.username != this.tokenService.getSubject())) {
             this.tokenService.clean();
             this.router.navigate(['/auth/login']);
           } else {

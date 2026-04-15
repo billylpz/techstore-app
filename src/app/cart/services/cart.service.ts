@@ -1,5 +1,6 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Product } from '../../products/interfaces/product.interface';
+import { TokenService } from '../../auth/jwt/token.service';
 
 export interface CartItem {
   product: Product,
@@ -12,6 +13,7 @@ export interface CartItem {
 export class CartService {
   private cartItems = signal<CartItem[]>([]);
   items = this.cartItems.asReadonly();
+  tokenService = inject(TokenService);
 
   constructor() {
     let shoppingCart = JSON.parse(sessionStorage.getItem("shopping-cart") ?? '[]') as CartItem[];
@@ -26,26 +28,36 @@ export class CartService {
   }
 
   addItem(item: CartItem): void {
-    this.cartItems.update(items => {
-      const existingItem = items.find(i => i.product.id == item.product.id);
 
-      if (existingItem) {
-        return items.map(i => i.product.id == item.product.id ? { ...i, quantity: i.quantity + item.quantity } : i);
-      }
+    if (this.tokenService.isAuthenticated() && this.tokenService.isExpired()) {
+      this.tokenService.sessionExpiredAlert();
+    } else {
 
-      return [...items, item];
-    });
+      this.cartItems.update(items => {
+        const existingItem = items.find(i => i.product.id == item.product.id);
 
-    this.saveCartToSession(this.cartItems());
+        if (existingItem) {
+          return items.map(i => i.product.id == item.product.id ? { ...i, quantity: i.quantity + item.quantity } : i);
+        }
+
+        return [...items, item];
+      });
+
+      this.saveCartToSession(this.cartItems());
+    }
 
   }
 
 
   deleteItem(item: CartItem): void {
-    this.cartItems.update(items => {
-      return items.filter(i => i.product.id != item.product.id);
-    });
-    this.saveCartToSession(this.cartItems());
+    if (this.tokenService.isAuthenticated() && this.tokenService.isExpired()) {
+      this.tokenService.sessionExpiredAlert();
+    } else {
+      this.cartItems.update(items => {
+        return items.filter(i => i.product.id != item.product.id);
+      });
+      this.saveCartToSession(this.cartItems());
+    }
   }
 
   increment(item: CartItem): void {
@@ -58,10 +70,7 @@ export class CartService {
 
   decrement(item: CartItem): void {
     if (item.quantity == 1) {
-      this.cartItems.update(items => {
-        return items.filter(i => i.product.id != item.product.id);
-      });
-      this.saveCartToSession(this.cartItems());
+      this.deleteItem(item);
       return;
     }
     item.quantity -= 1

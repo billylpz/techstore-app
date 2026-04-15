@@ -80,16 +80,20 @@ export class NavbarComponent implements OnInit {
     }
   });
 
-  onRedirectToProfile(){
-    if(this.tokenService.isAdmin()){
-      this.router.navigate(['/admin/users/form',this.tokenService.getId()])
-    }else{
-      this.router.navigate(['edit-profile',this.tokenService.getId()])
+  onRedirectToProfile() {
+    if (this.tokenService.isAdmin()) {
+      this.router.navigate(['/admin/users/form', this.tokenService.getId()])
+    } else {
+      this.router.navigate(['edit-profile', this.tokenService.getId()])
     }
   }
 
   toggleCart() {
-    this.openCart.update(v => !v);
+    if (this.tokenService.isAuthenticated() && this.tokenService.isExpired()) {
+      this.tokenService.sessionExpiredAlert();
+    } else {
+      this.openCart.update(v => !v);
+    }
   }
 
   logOut(): void {
