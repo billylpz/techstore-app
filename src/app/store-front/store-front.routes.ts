@@ -9,9 +9,9 @@ const routes: Routes = [
   {
     path: '', component: StoreFrontLayoutComponent, children: [
       { path: 'home', component: HomePageComponent, title: 'Bienvenido a TechStore' },
-      { path: 'product-details/:id', component: ProductDetailsPageComponent, title: '' },
-      { path: 'edit-profile/password', component: ChangePasswordPageComponent, title: 'Cambiar contraseña' },
-      { path: 'edit-profile/:id', component: EditProfilePageComponent, title: 'Editar mi perfil' },
+      { path: 'product-details/:id', component: ProductDetailsPageComponent },
+      { path: 'edit-profile/password', component: ChangePasswordPageComponent, title: 'Cambiar contraseña | TechStore' },
+      { path: 'edit-profile/:id', component: EditProfilePageComponent, title: 'Editar mi perfil | TechStore' },
       { path: '**', redirectTo: 'home' },
     ]
   },

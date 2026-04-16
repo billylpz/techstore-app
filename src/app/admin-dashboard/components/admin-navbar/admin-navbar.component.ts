@@ -14,6 +14,6 @@ export class AdminNavbarComponent {
 
   logOut(): void {
     this.tokenService.clean();
-    this.router.navigate(['/auth'])
+    this.router.navigate([''])
   }
 }

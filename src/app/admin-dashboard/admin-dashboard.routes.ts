@@ -15,27 +15,27 @@ export const routes: Routes = [
     {
         path: '', component: AdminDashboardLayoutComponent,
         children: [
-            { path: 'home', component: HomeAdminPageComponent, title: 'Bienvenido Admin' },
+            { path: 'home', component: HomeAdminPageComponent, title: 'Dashboard | Admin' },
 
-            { path: 'products', component: ProductsAdminPageComponent, title: 'Lista de Productos' },
-            { path: 'products/form', component: ProductAdminFormPageComponent, title: 'Guardar Producto' },
-            { path: 'products/form/:id', component: ProductAdminFormPageComponent, title: 'Guardar Producto' },
+            { path: 'products', component: ProductsAdminPageComponent, title: 'Lista de Productos | Admin' },
+            { path: 'products/form', component: ProductAdminFormPageComponent, title: 'Guardar Producto | Admin' },
+            { path: 'products/form/:id', component: ProductAdminFormPageComponent, title: 'Guardar Producto | Admin' },
 
             //marcas
-            { path: 'brands', component: BrandsAdminPageComponent, title: 'Lista de Marcas' },
-            { path: 'brands/form', component: BrandAdminFormPageComponent, title: 'Guardar Marca' },
-            { path: 'brands/form/:id', component: BrandAdminFormPageComponent, title: 'Guardar Marca' },
+            { path: 'brands', component: BrandsAdminPageComponent, title: 'Lista de Marcas | Admin' },
+            { path: 'brands/form', component: BrandAdminFormPageComponent, title: 'Guardar Marca | Admin' },
+            { path: 'brands/form/:id', component: BrandAdminFormPageComponent, title: 'Guardar Marca | Admin' },
 
             //categories
-            { path: 'categories', component: CategoriesAdminPageComponent, title: 'Lista de Categorias' },
-            { path: 'categories/form', component: CategoryAdminFormPageComponent, title: 'Guardar Categoria' },
-            { path: 'categories/form/:id', component: CategoryAdminFormPageComponent, title: 'Guardar Categoria' },
+            { path: 'categories', component: CategoriesAdminPageComponent, title: 'Lista de Categorias | Admin' },
+            { path: 'categories/form', component: CategoryAdminFormPageComponent, title: 'Guardar Categoria | Admin' },
+            { path: 'categories/form/:id', component: CategoryAdminFormPageComponent, title: 'Guardar Categoria | Admin' },
 
             //users
-            { path: 'users', component: UsersAdminPageComponent, title: 'Lista de Usuarios' },
-            { path: 'users/form', component: UserAdminFormPageComponent, title: 'Guardar Usuario' },
-            { path: 'users/form/:id', component: UserAdminFormPageComponent, title: 'Guardar Usuario' },
-            { path: 'users/edit-password', component: UserAdminChangePasswordPageComponent, title: 'Cambiar contraseña' },
+            { path: 'users', component: UsersAdminPageComponent, title: 'Lista de Usuarios | Admin' },
+            { path: 'users/form', component: UserAdminFormPageComponent, title: 'Guardar Usuario | Admin' },
+            { path: 'users/form/:id', component: UserAdminFormPageComponent, title: 'Guardar Usuario | Admin' },
+            { path: 'users/edit-password', component: UserAdminChangePasswordPageComponent, title: 'Cambiar contraseña | Admin' },
 
             //default
             { path: '**', redirectTo: 'home' }

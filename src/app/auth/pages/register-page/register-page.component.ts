@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import Swal from 'sweetalert2';
 import { RegisterRequest } from '../../interfaces/register-request';
 import { AuthService } from '../../services/auth.service';
@@ -11,7 +11,7 @@ import { FormUtils } from '../../../shared/utils/form-utils';
   selector: 'app-register-page',
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.css'],
-  imports: [FormErrorLabelComponent, ReactiveFormsModule]
+  imports: [FormErrorLabelComponent, ReactiveFormsModule,RouterLink]
 })
 export class RegisterPageComponent {
 
