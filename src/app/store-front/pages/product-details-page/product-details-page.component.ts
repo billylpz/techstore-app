@@ -1,6 +1,6 @@
-import { Component, effect, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, effect, ElementRef, inject, OnInit, signal, viewChild, ViewChild } from '@angular/core';
 import { ProductService } from '../../../products/services/product.service';
-import { rxResource, toSignal } from '@angular/core/rxjs-interop';
+import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 import { DecimalPipe } from '@angular/common';
@@ -9,6 +9,8 @@ import { Product } from '../../../products/interfaces/product.interface';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CartToastComponent } from "../../../cart/components/cart-toast/cart-toast.component";
 import { Title } from '@angular/platform-browser';
+import { ProductImage } from '../../../products/interfaces/product-image.interface';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-product-details-page',
@@ -20,14 +22,19 @@ export class ProductDetailsPageComponent implements OnInit {
   private productService = inject(ProductService);
   private route = inject(ActivatedRoute);
   private titleService = inject(Title);
+  private timeoutId: any;
+  private destroyRef = inject(DestroyRef);
   quantity = signal(1);
   cartService = inject(CartService);
   quantityInput = new FormControl(1)
   addToCartToast = signal<boolean>(false);
-  private timeoutId: any;
+  selectedImage = signal<ProductImage | undefined>(undefined);
+  zoomImage = viewChild<ElementRef<HTMLImageElement>>('zoomImage');
 
   ngOnInit(): void {
-    this.quantityInput.valueChanges.subscribe(value => {
+    this.quantityInput.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(value => {
       value = Number(value ?? 1);
       value = (isNaN(value) || value > 50) ? 1 : value;
 
@@ -36,10 +43,16 @@ export class ProductDetailsPageComponent implements OnInit {
     })
   }
 
-  titleEffects = effect(() => {
-    if(this.productResource.isLoading()){
+  //Setea la imagen principal del producto
+  mainProductImageEffect = effect(() => {
+    this.selectedImage.set(this.productResource.value()?.images[0])
+  });
+
+  //Cambia el título de la pagina por el nombre del producto
+  titleEffect = effect(() => {
+    if (this.productResource.isLoading()) {
       this.titleService.setTitle(`Cargando producto... | TechStore`)
-    }else{
+    } else {
       this.titleService.setTitle(`${this.productResource.value()?.name} | TechStore`)
     }
   });
@@ -61,7 +74,7 @@ export class ProductDetailsPageComponent implements OnInit {
 
   onAddToCart(product: Product) {
     if (this.quantity() == 0) {
-      alert("Ingresa una cantidad")
+      Swal.fire('Info', 'Ingresa una cantidad válida para continuar.', 'warning');
       return;
     }
 
@@ -94,5 +107,33 @@ export class ProductDetailsPageComponent implements OnInit {
     this.quantity.update(q => q == 50 ? q : q + 1);
     this.quantityInput.setValue(this.quantity(), { emitEvent: false })
   }
+
+  onSelectImage(image: ProductImage) {
+    this.selectedImage.set(image);
+  }
+
+  /*## Metodos para el zoom de la foto principal del producto ##*/
+  onMouseMove(e: MouseEvent) {
+    const container = e.currentTarget as HTMLElement;
+    const img = this.zoomImage()!.nativeElement;
+
+    // Obtenemos las dimensiones y posición del contenedor
+    const { left, top, width, height } = container.getBoundingClientRect();
+
+    // Calculamos la posición del mouse relativa al contenedor en porcentaje
+    const x = ((e.pageX - left) / width) * 100;
+    const y = ((e.pageY - top) / height) * 100;
+
+    // Aplicamos el origen de la transformación y el escalado
+    img.style.transformOrigin = `${x}% ${y}%`;
+    img.style.transform = 'scale(2.5)';
+  }
+
+  onMouseLeave() {
+    const img = this.zoomImage()!.nativeElement;
+    img.style.transformOrigin = 'center';
+    img.style.transform = 'scale(1)';
+  }
+  /** #### */
 
 }

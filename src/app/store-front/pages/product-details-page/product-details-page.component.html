@@ -1,10 +1,30 @@
 <div class="flex flex-col gap-5">
 
-  <div class="flex gap-5">
-    <section>
-      <img [src]="productResource.value()?.images![0].imageUrl" alt="" class="h-150 w-200">
+  <div class="flex gap-15">
+
+    <!-- photo gallery -->
+    <section class="flex flex-col gap-5">
+      <!-- main -->
+      <div class="main-image-container relative overflow-hidden border border-gray-200 rounded-lg bg-white shadow-sm"
+        (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()">
+
+        <img [src]="selectedImage()?.imageUrl" [alt]="productResource.value()?.name" #zoomImage
+          class="h-100 w-full object-contain transition-transform duration-200 ease-out origin-center">
+      </div>
+
+      <!-- mini -->
+      <div class="flex gap-10  justify-center">
+        @for (image of productResource.value()?.images; track image.imageUrl) {
+        <button (click)="onSelectImage(image)" class="rounded-sm border p-1 cursor-pointer"
+          [class.border-blue-600]="selectedImage()?.imageUrl==image.imageUrl"
+          [class.border-0]="selectedImage()?.imageUrl!=image.imageUrl">
+          <img [src]="image?.imageUrl" [alt]="image?.imageUrl" class="size-15">
+        </button>
+        }
+      </div>
     </section>
 
+    <!-- product info -->
     <section class="flex flex-col gap-15 max-w-1/2">
       <p class="text-2xl font-semibold">{{productResource.value()?.name}}</p>
       <p class="text-blue-700 font-semibold text-3xl"><span> ( </span>{{productResource.value()?.price |
@@ -30,6 +50,8 @@
 
   </div>
 
+  <hr class="text-gray-300">
+
   <section class=" flex flex-col gap-5 mt-15">
     <h1 class="font-bold text-3xl">DESCRIPCION:</h1>
     <p class="whitespace-pre-wrap">
@@ -39,5 +61,5 @@
 </div>
 
 @if (addToCartToast()) {
-  <cart-toast></cart-toast>
-} 
+<cart-toast></cart-toast>
+}
