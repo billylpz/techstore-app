@@ -23,8 +23,12 @@ export class CartService {
     }
   }
 
-  saveCartToSession(items: CartItem[]) {
+  saveCartToSession(items: CartItem[]): void {
     sessionStorage.setItem("shopping-cart", JSON.stringify(items));
+  }
+
+  deleteCartSession(): void {
+    sessionStorage.removeItem("shopping-cart");
   }
 
   addItem(item: CartItem): void {

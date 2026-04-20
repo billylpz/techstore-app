@@ -32,6 +32,8 @@ export class FormUtils {
                         return `Máximo de ${errors['maxlength'].requiredLength} carácteres`;
                     case "min":
                         return `El valor mínimo es ${errors['min'].min}`;
+                    case "email":
+                        return `Formato de email inválido`;
                     case "max":
                         return `El valor máximo es ${errors['max'].max}`;
                     case "pattern":

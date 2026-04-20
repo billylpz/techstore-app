@@ -1,0 +1,149 @@
+<section class="flex flex-col ">
+  <h1 class="text-3xl text-center mb-10 ">Checkout</h1>
+
+  <div class="flex gap-5">
+    <!-- form -->
+    <section class="w-1/2  p-3">
+      <form action="" [formGroup]="myForm" class="flex flex-col gap-5">
+        <div class="flex gap-3">
+          <div class="flex flex-col  items-start w-1/2">
+            <label for="name" class="text-sm font-semibold">Nombres <span class="text-red-400">*</span> </label>
+            <input type="text" name="name" class="border border-gray-500 rounded-sm w-full px-2" formControlName="name">
+            <form-error-label [control]="myForm.get('name')!"></form-error-label>
+          </div>
+          <div class="flex flex-col  items-start w-1/2 ">
+            <label for="lastname" class="text-sm font-semibold">Apellidos<span class="text-red-400">*</span></label>
+            <input type="text" name="lastname" class="border border-gray-500 rounded-sm w-full px-2"
+              formControlName="lastname">
+            <form-error-label [control]="myForm.get('lastname')!"></form-error-label>
+          </div>
+        </div>
+
+        <div class="flex flex-col  items-start">
+          <label for="document" class="text-sm font-semibold">Documento <span class="text-red-400">*</span> </label>
+          <input type="text" name="document" class="border border-gray-500 rounded-sm w-full px-2"
+            formControlName="document">
+          <form-error-label [control]="myForm.get('document')!"></form-error-label>
+        </div>
+
+        <div class="flex flex-col  items-start">
+          <label for="phoneNumber" class="text-sm font-semibold">Teléfono <span class="text-red-400">*</span> </label>
+          <input type="text" name="phoneNumber" class="border border-gray-500 rounded-sm w-full px-2"
+            formControlName="phoneNumber">
+          <form-error-label [control]="myForm.get('phoneNumber')!"></form-error-label>
+        </div>
+
+        <div class="flex flex-col  items-start">
+          <label for="email" class="text-sm font-semibold">Correo Electrónico <span class="text-red-400">*</span>
+          </label>
+          <input type="email" name="email" class="border border-gray-500 rounded-sm w-full px-2"
+            formControlName="email">
+          <form-error-label [control]="myForm.get('email')!"></form-error-label>
+        </div>
+
+        <div class="flex flex-col  items-start">
+          <label for="shippingAddress" class="text-sm font-semibold">Dirección <span class="text-red-400">*</span>
+          </label>
+          <input type="text" class="border border-gray-500 rounded-sm w-full px-2" name="shippingAddress"
+            formControlName="shippingAddress">
+          <form-error-label [control]="myForm.get('shippingAddress')!"></form-error-label>
+        </div>
+
+        <div class="flex flex-col  items-start">
+          <label for="shippingDistrict" class="text-sm font-semibold">Distrito <span class="text-red-400">*</span>
+          </label>
+          <input type="text" class="border border-gray-500 rounded-sm w-full px-2" name="shippingDistrict"
+            formControlName="shippingDistrict">
+          <form-error-label [control]="myForm.get('shippingDistrict')!"></form-error-label>
+        </div>
+
+        <div class="flex flex-col  items-start">
+          <label for="shippingCity" class="text-sm font-semibold">Ciudad <span class="text-red-400">*</span> </label>
+          <input type="text" class="border border-gray-500 rounded-sm w-full px-2" name="shippingCity"
+            formControlName="shippingCity">
+          <form-error-label [control]="myForm.get('shippingCity')!"></form-error-label>
+        </div>
+
+        <div class="flex flex-col  items-start">
+          <label for="shippingAditionalInfo" class="text-sm font-semibold">Info Adicional <span
+              class="text-red-400">*</span> </label>
+          <textarea rows="5" placeholder="Detalles adicionales como referencia de la dirección, etc."
+            class="border border-gray-500 rounded-sm w-full p-2 text-black placeholder-gray-400 text-sm"
+            name="shippingAditionalInfo" formControlName="shippingAditionalInfo">
+          </textarea>
+        </div>
+
+      </form>
+    </section>
+
+    <!-- checkout info  -->
+    @if(cartService.items().length==0){
+    <div
+      class="flex flex-col items-center justify-center w-1/2 py-20 bg-white border border-dashed border-gray-300 rounded-lg shadow-sm ">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+
+      <h2 class="text-xl font-bold text-gray-800 mb-2">Tu carrito está vacío</h2>
+      <p class="text-gray-500 mb-6 text-center max-w-sm">
+        Parece que aún no has añadido nada a tu carrito. <br>
+        Debes añadir productos para poder continuar con el pago.
+      </p>
+
+      <a routerLink="/home"
+        class="bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition-colors shadow-md">
+        Explorar productos
+      </a>
+    </div>
+    }@else{
+    <section class="flex flex-col gap-5 w-1/2 bg-stone-50 p-5">
+      <h1 class="font-semibold text-lg">Tu orden</h1>
+      <div class="border border-gray-300">
+        <section class="flex justify-between font-semibold text-sm p-3 border-b border-gray-300">
+          <h1>Producto</h1>
+          <h1>SubTotal</h1>
+        </section>
+
+        @for (item of cartService.items() ; track item) {
+        <section class="flex justify-between p-3 border-b border-gray-300">
+          <div class="flex gap-3 w-80">
+            <img [src]="item.product.images[0].imageUrl" alt="" class="size-20">
+            <p class="text-xs font-semibold">{{item.product.name}}</p>
+            <p class="text-xs font-semibold text-blue-600">x{{item.quantity}}</p>
+          </div>
+
+          <p class="text-sm font-semibold text-blue-600">S/. {{item.product.price * item.quantity | number:'1.2-2'}}</p>
+        </section>
+        }
+
+        <section class="flex justify-between font-semibold items-center p-3 border-b border-gray-300">
+          <h1 class="text-xl">Total</h1>
+          <h1 class="text-2xl font-bold text-blue-600">S/. {{cartService.getTotal() | number:'1.2-2'}} </h1>
+        </section>
+
+
+        <section class="flex flex-col justify-between text-sm items-start p-3 border-b border-gray-300 gap-5">
+          <p class="text-sm text-gray-500">Sus datos personales se utilizarán para procesar su pedido, respaldar su
+            experiencia en este sitio web y para otros fines descritos en nuestra política de privacidad.</p>
+
+          <div class="flex gap-5">
+            <input type="checkbox" id="checkbox" class="cursor-pointer accent-blue-600"
+              [formControl]="acceptTermsControl">
+            <label for="checkbox" class="text-xs cursor-pointer text-gray-700">
+              He leído y acepto los <a routerLink="/home" class="text-blue-600 underline">términos y condiciones</a> de TechStore *
+            </label>
+          </div>
+
+          <button class="bg-blue-600 text-white p-3 w-full text-lg cursor-pointer font-semibold
+           rounded-sm disabled:bg-gray-400 disabled:text-gray-300 disabled:cursor-auto"
+            [disabled]="myForm.invalid || acceptTermsControl.value == false" (click)="onPagar()">Pagar</button>
+        </section>
+      </div>
+
+    </section>
+    }
+  </div>
+
+</section>

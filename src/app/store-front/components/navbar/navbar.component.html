@@ -27,6 +27,7 @@
             <summary><span class=""> {{tokenService.getSubject()}}</span></summary>
             <ul class="p-2 bg-white text-black w-30 z-1 -translate-x-1/2 text-xs">
               <li><button (click)="onRedirectToProfile()">Editar mi perfil</button> </li>
+              <li><button [routerLink]="['/my-orders']">Mis compras</button> </li>
               @if(tokenService.isAdmin()){
                 <li><a class="text-blue-600" routerLink="/admin/home">Ir al dashboard</a> </li> 
               }

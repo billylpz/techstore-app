@@ -1,0 +1,122 @@
+<div class="container mx-auto p-6 max-w-5xl flex flex-col min-h-screen ">
+  <h1 class="text-2xl font-bold mb-6 text-gray-800">Mis Pedidos</h1>
+
+  @if(ordersResource.value()?.totalElements!=0){
+  <div class=" flex justify-center">
+    <paginator [totalPages]="ordersResource.value()?.totalPages" [currentPage]="ordersResource.value()?.page">
+    </paginator>
+  </div>
+  }
+
+  <section class=" flex-1">
+    @if (ordersResource.isLoading()) {
+    <div class="flex justify-center py-10">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+    }@else{
+
+
+    <div class="space-y-4 flex flex-col gap-10 ">
+      @for (order of ordersResource.value()?.content; track order.createdAt) {
+      <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+
+        <div class="bg-gray-50 p-4 border-b border-gray-200 flex flex-wrap justify-between items-center gap-4">
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-semibold">Fecha del pedido</p>
+            <p class="text-sm font-medium">{{ order.createdAt | date:'dd MMM yyyy, HH:mm' }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-semibold">Total</p>
+            <p class="text-sm font-bold text-blue-600">S/. {{ order.totalAmount | number:'1.2-2' }}</p>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500 uppercase font-semibold">Enviar a</p>
+            <p class="text-sm text-gray-700">{{ order.name }} {{ order.lastname }}</p>
+          </div>
+          <div class="flex flex-col items-end gap-3">
+            <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+              Completado
+            </span>
+            <button (click)="downloadPdf(order.id!)" class="flex items-center gap-1 text-xs font-medium text-blue-600 
+              bg-blue-200 p-2 rounded-full cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d=" eye" />
+                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path
+                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Ver Comprobante
+            </button>
+          </div>
+        </div>
+
+        <div class="p-4">
+          <h3 class="text-sm font-semibold mb-3 text-gray-600">Productos</h3>
+          <div class="divide-y divide-gray-100">
+            @for (item of order.orderItems; track item.product.id) {
+            <div class="py-3 flex items-center gap-4">
+              <div class="w-16 h-16 shrink-0 border rounded overflow-hidden">
+                <a [routerLink]="['/product-details',item.product.id]">
+                  <img [src]="item.product.images[0].imageUrl" [alt]="item.product.description"
+                    class="w-full h-full object-contain">
+                </a>
+              </div>
+
+              <div class="flex flex-col gap-2">
+                <h4 class="text-lg font-medium text-gray-800 leading-tight">
+                  {{ item.product.name }}
+                </h4>
+                <h4 class="text-sm font-medium text-gray-500 leading-tight">
+                  {{ item.product.description }}
+                </h4>
+                <p class="text-xs text-gray-500 mt-1">
+                  Cantidad: {{ item.quantity }} | Precio: S/. {{ item.price | number:'1.2-2' }}
+                </p>
+
+                <div class="">
+                  <p class="text-sm font-semibold text-gray-900">
+                    SUBTOTAL: S/. {{ item.subTotalAmount | number:'1.2-2' }}
+                  </p>
+                </div>
+              </div>
+
+
+            </div>
+            }
+          </div>
+        </div>
+
+        <div class="bg-gray-50/50 p-3 px-4 border-t border-gray-100 text-sm text-gray-500 flex justify-between">
+          <p><strong>Dirección:</strong> {{ order.shippingAddress }}, {{ order.shippingDistrict }} ({{
+            order.shippingCity
+            }})</p>
+          @if (order.shippingAditionalInfo) {
+          <p class="italic">"{{ order.shippingAditionalInfo }}"</p>
+          }
+        </div>
+      </div>
+      <hr class="text-gray-500">
+      } @empty {
+      <div class="text-center py-20 bg-gray-50 rounded-lg border-2 border-dashed">
+        <p class="text-gray-500">Aún no has realizado ninguna compra.</p>
+        <a routerLink="/home" class=" block mt-4 text-blue-600 font-medium hover:underline">
+          Ir a la tienda
+        </a>
+      </div>
+      }
+    </div>
+
+
+    }
+   
+  </section>
+
+   @if(ordersResource.value()?.totalElements!=0){
+    <div class=" flex justify-center">
+      <paginator [totalPages]="ordersResource.value()?.totalPages" [currentPage]="ordersResource.value()?.page">
+      </paginator>
+    </div>
+    }
+
+</div>
