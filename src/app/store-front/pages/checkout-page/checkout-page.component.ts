@@ -46,7 +46,21 @@ export class CheckoutPageComponent {
       return;
     }
 
-  
+    if (this.tokenService.isExpired()) {
+      Swal.fire({
+        title: 'Atención',
+        text: 'Tu sesión expiró, vuelve a iniciar sesión para procesar tu pedido.',
+        icon: 'warning',
+        confirmButtonText: 'Ir al Login',
+        confirmButtonColor: '#2563eb',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.tokenService.clean()
+          this.router.navigate(['/auth/login']);
+        }
+      });
+      return;
+    }
 
     const cartItems = this.cartService.items();
     const orderItems: OrderItem[] = cartItems.map(ci => {

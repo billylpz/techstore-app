@@ -29,7 +29,7 @@
               <li><button (click)="onRedirectToProfile()">Editar mi perfil</button> </li>
               <li><button [routerLink]="['/my-orders']">Mis compras</button> </li>
               @if(tokenService.isAdmin()){
-                <li><a class="text-blue-600" routerLink="/admin/home">Ir al dashboard</a> </li> 
+              <li><a class="text-blue-600" routerLink="/admin/home">Ir al dashboard</a> </li>
               }
               <li><button type="button" (click)="logOut()">Cerrar sesión</button></li>
             </ul>
@@ -47,22 +47,23 @@
 
 
 <nav class="flex gap-15 bg-white text-black px-15 border border-blue-400">
-  <select class=" bg-white w-35" [formControl]="categorySelect">
-    <option [value]="''" selected disabled>Categorias</option>
-    <option [value]="''">--Todos--</option>
+  <select class="select text-blue-600 bg-white w-35 outline-none border-0 font-semibold" [formControl]="categorySelect">
+    <option [value]="''" selected disabled class="font-bold text-lg" >Categorias</option>
+    <option [value]="''" class="text-black  bg-white shadow-none">--Todos--</option>
 
     @for (category of categoriesResource.value()?.content; track category.id) {
-    <option [value]="category.id">{{category.name}}</option>
+    <option [value]="category.id" class="text-black  bg-white shadow-none">{{category.name}}</option>
     }
   </select>
 
 
-  <select class=" bg-white w-35" [formControl]="brandSelect">
-    <option [value]="''" selected disabled>Marcas</option>
-    <option [value]="''">--Todos--</option>
+  <select class="select text-blue-800 bg-white w-35 outline-none border-0 font-semibold"
+     [formControl]="brandSelect">
+    <option [value]="''" selected disabled class="font-bold text-lg">Marcas</option>
+    <option [value]="''" class="text-black  bg-white shadow-none">--Todos--</option>
 
     @for (brand of brandsResource.value()?.content; track brand.id) {
-    <option [value]="brand.id">{{brand.name}}</option>
+    <option [value]="brand.id" class="text-black bg-white shadow-none">{{brand.name}}</option>
     }
   </select>
 

@@ -43,23 +43,7 @@ export class CartModalComponent {
   }
 
   onPagar() {
-    if (!this.tokenService.isAuthenticated()) {
-      Swal.fire({
-        title: 'Atención',
-        text: 'Debes iniciar sesión para procesar tu pedido.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Ir al Login',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#2563eb', 
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.router.navigate(['/auth/login']);
-        }
-      });
-      return;
-    }
-
+   
     let invalid = this.cartItems().find(i => i.quantity == 0);
     if (invalid) {
       Swal.fire('', `El Item ${invalid.product.name} no puede tener una cantidad en 0.`, 'warning');
