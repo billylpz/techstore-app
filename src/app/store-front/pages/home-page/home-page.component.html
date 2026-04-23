@@ -1,12 +1,44 @@
-@if(productsResource.isLoading()){
-<loading-dots/>
+<div class="flex flex-col min-h-screen ">
+  @if(productsResource.isLoading()){
+  <loading-dots />
 
-}@else {
-<div class="grid grid-cols-4 gap-15">
-  @for (product of productsResource.value()?.content; track product.id) {
-  <app-product-card [product]="product" />
-  }@empty {
-    <p>No se encontraron resultados...</p>
+  }@else {
+
+  <div class="flex gap-5 justify-end ">
+    <div class="flex items-center gap-3">
+      <label for="select" class="text-sm">Ordenar por:</label>
+      <select class="select text-blue-600 bg-white w-48 outline-none border-0 font-semibold"
+        [formControl]="orderBySelect">
+        <option value="all" disabled class="text-black  bg-white shadow-none">--seleccione--</option>
+        <option value="all" class="bg-white shadow-none">Todos</option>
+        <option value="price,asc" class=" bg-white shadow-none">Precio menor a mayor</option>
+        <option value="price,desc" class=" bg-white shadow-none">Precio mayor a menor</option>
+      </select>
+    </div>
+  </div>
+
+
+  @if(productsResource.value()?.totalElements!=0){
+  <div class="flex justify-center">
+    <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page">
+    </paginator>
+  </div>
   }
+
+  <div class="grid grid-cols-4 gap-15 my-15  ">
+    @for (product of productsResource.value()?.content; track product.id) {
+    <app-product-card [product]="product" />
+    }@empty {
+    <p>No se encontraron resultados...</p>
+    }
+  </div>
+
+  @if(productsResource.value()?.totalElements!=0){
+  <div class="flex justify-center">
+    <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page">
+    </paginator>
+  </div>
+  }
+  }
+
 </div>
-}

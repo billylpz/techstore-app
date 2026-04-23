@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 import { CommonService, SearchByOptions } from '../../shared/services/common.service';
 import { Observable, tap } from 'rxjs';
 import { PageResponse } from '../../shared/interfaces/page-response.interface';
+import { HttpParams } from '@angular/common/http';
 
 export interface SearchProductsOptions extends SearchByOptions {
   categoryId?: string,
   brandId?: string,
+  sort?: string,
 }
 
 @Injectable({
@@ -18,37 +20,44 @@ export class ProductService extends CommonService<Product> {
   }
 
   findAllByFilterOnlyActive(options: SearchProductsOptions): Observable<PageResponse<Product>> {
-    const { name = '', categoryId = '', brandId = '' } = options;
+    let { page = 0, name = '', categoryId = '', brandId = '', sort = '' } = options;
 
-    return this.http.get<PageResponse<Product>>(`${this.urlApi}/by-filter-active`, {
-      params: { name, categoryId, brandId }
-    });
+    let params = new HttpParams()
+      .append('page', page)
+      .append('name', name)
+      .append('categoryId', categoryId)
+      .append('brandId', brandId)
+
+    if (sort.trim() == 'price,asc' || sort.trim() == 'price,desc') {
+      params = params.append('sort', sort);
+    }
+
+    if (sort.trim() == 'all'){
+      params = params.delete('categoryId');
+      params = params.delete('brandId');
+    }
+
+      return this.http.get<PageResponse<Product>>(`${this.urlBase}/by-filter-active`, {
+        params: params
+      });
   }
-
-
 
   saveWithImages(product: Product, files: File[]): Observable<Product> {
     const formData = this.buildFormData(product, files);
 
-    return this.http.post<Product>(`${this.urlApi}/with-images`, formData).pipe(
-      tap(() => this.clearCache()),
-    );
+    return this.http.post<Product>(`${this.urlBase}/with-images`, formData);
   }
 
 
   updateWithImages(product: Product, files: File[]): Observable<Product> {
     const formData = this.buildFormData(product, files);
 
-    return this.http.put<Product>(`${this.urlApi}/with-images/${product.id}`, formData).pipe(
-      tap(() => this.clearCache()),
-    );
+    return this.http.put<Product>(`${this.urlBase}/with-images/${product.id}`, formData);
   }
 
 
   deleteProductImage(publicId: string): Observable<void> {
-    return this.http.delete<void>(`${this.urlApi}/product-image`, { params: { publicId } }).pipe(
-      tap(() => this.clearCache()),
-    );
+    return this.http.delete<void>(`${this.urlBase}/product-image`, { params: { publicId } });
   }
 
   ///helpers
