@@ -6,16 +6,29 @@ import { EditProfilePageComponent } from './pages/edit-profile-page/edit-profile
 import { ChangePasswordPageComponent } from './pages/change-password-page/change-password-page.component';
 import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.component';
 import { MyOrdersPageComponent } from './pages/my-orders-page/my-orders-page.component';
+import { storeGuard } from './guards/store.guard';
 
 const routes: Routes = [
   {
     path: '', component: StoreFrontLayoutComponent, children: [
       { path: 'home', component: HomePageComponent, title: 'Bienvenido a TechStore' },
-      { path: 'checkout', component: CheckoutPageComponent, title: 'Checkout | TechStore' },
+      {
+        path: 'checkout', component: CheckoutPageComponent, title: 'Checkout | TechStore',
+        canActivate: [storeGuard]
+      },
       { path: 'product-details/:id', component: ProductDetailsPageComponent },
-      { path: 'edit-profile/password', component: ChangePasswordPageComponent, title: 'Cambiar contraseña | TechStore' },
-      { path: 'edit-profile/:id', component: EditProfilePageComponent, title: 'Editar mi perfil | TechStore' },
-      { path: 'my-orders', component: MyOrdersPageComponent, title: 'Mis Pedidos | TechStore' },
+      {
+        path: 'edit-profile/password', component: ChangePasswordPageComponent, title: 'Cambiar contraseña | TechStore',
+        canActivate: [storeGuard]
+      },
+      {
+        path: 'edit-profile/:id', component: EditProfilePageComponent, title: 'Editar mi perfil | TechStore',
+        canActivate: [storeGuard]
+      },
+      {
+        path: 'my-orders', component: MyOrdersPageComponent, title: 'Mis Pedidos | TechStore',
+        canActivate: [storeGuard]
+      },
       { path: '**', redirectTo: 'home' },
     ]
   },

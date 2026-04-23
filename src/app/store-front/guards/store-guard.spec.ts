@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { CanActivateFn } from '@angular/router';
 
-import { adminGuard } from './admin.guard';
+import { storeGuardGuard } from './store.guard';
 
-describe('adminGuard', () => {
+describe('storeGuardGuard', () => {
   const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => adminGuard(...guardParameters));
+      TestBed.runInInjectionContext(() => storeGuardGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

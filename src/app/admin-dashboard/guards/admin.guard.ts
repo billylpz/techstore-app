@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { TokenService } from '../jwt/token.service';
+import { TokenService } from '../../auth/jwt/token.service';
 
 export const adminGuard: CanActivateFn = (route, state) => {
   const tokenService = inject(TokenService);
