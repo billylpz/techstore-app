@@ -18,106 +18,59 @@ export interface SearchByOptions extends PageOptions {
 
 
 export class CommonService<E extends BaseEntity> {
-  protected urlApi;
+  protected urlBase;
   protected http = inject(HttpClient);
-  protected apiPath;
+  protected urlPath;
 
-  constructor(endpoint: string) {
-    this.urlApi = `${environment.API_URL}${endpoint}`;
-    this.apiPath = endpoint;
+  constructor(urlPath: string) {
+    this.urlBase = `${environment.API_URL}${urlPath}`;
+    this.urlPath = urlPath;
   }
 
 
   findAll(options: PageOptions): Observable<PageResponse<E>> {
     const { page = 0, size = 5 } = options;
-    const key = `cache-${this.apiPath}-${page}-${size}`;
 
-    if (sessionStorage.getItem(key)) {
-      const response = JSON.parse(sessionStorage.getItem(key) || "{}");
-      if (response.content != null && response.content.length > 0) {
-        return of(response).pipe(delay(300));
-      }
-    }
-
-    return this.http.get<PageResponse<E>>(this.urlApi, {
-      params: {
-        page, size
-      }
-    }).pipe(
-      tap(response => {
-        sessionStorage.setItem(key, JSON.stringify(response))
-      }),
-    );
+    return this.http.get<PageResponse<E>>(this.urlBase, { params: { page, size } });
   }
 
   findAllByFilters(options: SearchByOptions): Observable<PageResponse<E>> {
     const { page = 0, size = 10, name = '', activeSelection = '1' } = options;
-    const key = `cache-${this.apiPath}-${page}-${size}-filter:${name}-${activeSelection}`;
 
-    if (sessionStorage.getItem(key)) {
-      const response = JSON.parse(sessionStorage.getItem(key) || "{}");
-      if (response.content != null && response.content.length > 0) {
-        return of(response).pipe(delay(300));
-      }
-    }
-
-    return this.http.get<PageResponse<E>>(`${this.urlApi}/by-filters`, {
+    return this.http.get<PageResponse<E>>(`${this.urlBase}/by-filters`, {
       params: {
-        page, size, name:name.trim(), activeSelection
+        page, size, name: name.trim(), activeSelection
       }
-    }).pipe(
-      tap(response => {
-        sessionStorage.setItem(key, JSON.stringify(response))
-      }),
-    );
+    });
   }
 
-  findAllActive (options: SearchByOptions): Observable<PageResponse<E>> {
-    const { page = 0, size = 10} = options;
+  findAllActive(options: SearchByOptions): Observable<PageResponse<E>> {
+    const { page = 0, size = 10 } = options;
 
-    return this.http.get<PageResponse<E>>(`${this.urlApi}/active`, {
-      params: { page, size}
-    });
+    return this.http.get<PageResponse<E>>(`${this.urlBase}/active`, { params: { page, size } });
   }
 
   findById(id: number | null): Observable<E | null> {
     if (!id) {
       return of(null);
     }
-    return this.http.get<E>(`${this.urlApi}/${id}`).pipe(
-    );
+    return this.http.get<E>(`${this.urlBase}/${id}`);
   }
 
   save(entity: E): Observable<E> {
-    return this.http.post<E>(this.urlApi, entity).pipe(
-      tap(() => this.clearCache()),
-    );
+    return this.http.post<E>(this.urlBase, entity);
   }
 
   update(entity: E): Observable<E> {
-    return this.http.put<E>(`${this.urlApi}/${entity.id}`, entity).pipe(
-      tap(() => this.clearCache()),
-    );
+    return this.http.put<E>(`${this.urlBase}/${entity.id}`, entity);
   }
 
   activate(id: number): Observable<any> {
-    return this.http.patch<any>(`${this.urlApi}/${id}/activate`, null).pipe(
-      tap(() => this.clearCache()),
-    );
+    return this.http.patch<any>(`${this.urlBase}/${id}/activate`, null);
   }
 
   delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.urlApi}/${id}`).pipe(
-      tap(() => this.clearCache())
-    );
-  }
-
-  //---------helpers
-
-  //elimina la caché de un recurso cuando se hace un save/update/delete de la entidad correspondiente
-  protected clearCache(): void {
-    Object.keys(sessionStorage).filter(key => key.startsWith(`cache-${this.apiPath}`))
-      .forEach(key => sessionStorage.removeItem(key));
+    return this.http.delete<void>(`${this.urlBase}/${id}`);
   }
 
 

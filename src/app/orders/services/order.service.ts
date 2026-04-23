@@ -22,7 +22,7 @@ export class OrderService {
 
   constructor() {
     this.urlBase = `${environment.API_URL}/api/orders`
-    this.urlPath = `api/orders`
+    this.urlPath = `/api/orders`
   }
 
   downloadOrderPdf(orderId: number): Observable<Blob> {
@@ -32,7 +32,7 @@ export class OrderService {
   }
 
   findAllMyOrders(options: PageOptions): Observable<PageResponse<Order>> {
-    const { page = 0, size = 2 } = options;
+    const { page = 0, size = 3 } = options;
     const key = `cache-${this.urlPath}-${this.tokenService.getId()}-${page}-${size}`;
 
     if (sessionStorage.getItem(key)) {

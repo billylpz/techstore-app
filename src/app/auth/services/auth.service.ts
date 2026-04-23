@@ -11,17 +11,17 @@ import { RegisterRequest } from '../interfaces/register-request';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.API_URL}/auth`
+  private urlBase = `${environment.API_URL}/auth`
   private tokenService = inject(TokenService);
 
   login(request: LoginRequest): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, request).pipe(
+    return this.http.post<any>(`${this.urlBase}/login`, request).pipe(
       tap(res => this.tokenService.save(res.token)),
     );
   }
 
   register(request: RegisterRequest): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/register`, request);
+    return this.http.post<any>(`${this.urlBase}/register`, request);
   }
 
 }

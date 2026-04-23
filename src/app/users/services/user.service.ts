@@ -18,7 +18,7 @@ export class UserService extends CommonService<User> {
   findAllByNameOrLastname(options: SearchByOptions): Observable<PageResponse<User>> {
     const { page = 0, size = 3, term = '' } = options;
 
-    return this.http.get<PageResponse<User>>(`${this.urlApi}/by-term`, {
+    return this.http.get<PageResponse<User>>(`${this.urlBase}/by-term`, {
       params: {
         page, size, term
       }
@@ -27,7 +27,7 @@ export class UserService extends CommonService<User> {
 
   override findAll(options: PageOptions): Observable<PageResponse<User>> {
     const { page = 0, size = 10 } = options;
-    return this.http.get<PageResponse<User>>(this.urlApi, {
+    return this.http.get<PageResponse<User>>(this.urlBase, {
       params: {
         page, size
       }
@@ -35,6 +35,6 @@ export class UserService extends CommonService<User> {
   }
 
   changePassword(request: PasswordChangeRequest): Observable<void> {
-    return this.http.patch<void>(`${this.urlApi}/change-password`,request);
+    return this.http.patch<void>(`${this.urlBase}/change-password`,request);
   }
 }
