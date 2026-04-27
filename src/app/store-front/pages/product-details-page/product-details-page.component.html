@@ -8,8 +8,14 @@
       <div class="main-image-container relative overflow-hidden border border-gray-200 rounded-lg bg-white shadow-sm"
         (mousemove)="onMouseMove($event)" (mouseleave)="onMouseLeave()">
 
+        @if(selectedImage()){
         <img [src]="selectedImage()?.imageUrl" [alt]="productResource.value()?.name" #zoomImage
           class="h-100 w-full object-contain transition-transform duration-200 ease-out origin-center">
+        }@else{
+        <img src="producto-sin-imagen.jpg" alt=""
+          class="rounded-xl h-100 w-full object-contain transition-transform duration-200 ease-out origin-center" />
+        }
+
       </div>
 
       <!-- mini -->

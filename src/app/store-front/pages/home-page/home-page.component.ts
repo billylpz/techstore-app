@@ -33,11 +33,11 @@ export class HomePageComponent {
 
       if (this.sortByPrice().trim() == 'all') {
         this.sortByPrice.set('')
-        this.router.navigate([''], {
-          relativeTo: this.route,
-          queryParams: { page: 1 }
-        });
       }
+      this.router.navigate([''], {
+        relativeTo: this.route,
+        queryParams: { page: 1 }
+      });
     })
   }
 

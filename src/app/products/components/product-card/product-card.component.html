@@ -1,7 +1,11 @@
 <div class="card bg-white w-70 shadow-sm z-10">
   <a class=" cursor-pointer" [routerLink]="['/product-details',product()?.id]">
     <figure class="px-10 pt-10">
-      <img [src]="product()?.images![0].imageUrl" alt="" class="rounded-xl" />
+      @if(product()?.images![0]){
+        <img [src]="product()?.images![0].imageUrl" alt="" class="rounded-xl" />
+      }@else{
+        <img src="producto-sin-imagen.jpg" alt="" class="rounded-xl" /> 
+      }
     </figure>
     <div class="card-body items-center text-center">
       <h2 class="card-title hover:text-blue-700 line-clamp-2">{{product()?.name}}</h2>
