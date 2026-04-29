@@ -1,5 +1,18 @@
 <section class="flex flex-col flex-1">
-  <h1 class="text-4xl text-center my-10">Lista de Marcas</h1>
+  <h1 class="text-4xl text-center my-10 font-bold">Lista de Marcas</h1>
+
+
+  <div class="flex flex-col  md:flex-row md:justify-between md:items-center mt-15">
+    <div class="flex justify-center md:justify-start md:w-1/2 ">
+      <a type="button" routerLink="form"
+        class="bg-blue-600 hover:bg-blue-700 text-white w-full md:w-fit text-center px-6 py-2 rounded-md transition-colors">
+        Crear Marca
+      </a>
+    </div>
+
+    <admin-filter-bar class="w-full" (searchByNameValueEmitter)="searchByNameResult.set($event)"
+      (filterSelectionEmitter)="filterSelection.set($event)" />
+  </div>
 
   @if (brandsResource.value()?.totalElements!>0) {
   <div class="flex justify-center">
@@ -7,22 +20,27 @@
   </div>
   }
 
-  <div class="flex justify-between mt-10">
-    <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Marca</a>
-    <admin-filter-bar (searchByNameValueEmitter)="searchByNameResult.set($event)"
-      (filterSelectionEmitter)="filterSelection.set($event)">
-    </admin-filter-bar>
-  </div>
-
   @if (brandsResource.isLoading()) {
-  <div class=" flex justify-center h-50 ">
-    <span class="loading loading-dots loading-xl "></span>
-  </div>
+  <loading-dots/>
   } @else if (brandsResource.value()?.content?.length==0) {
-  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron marcas</p>
+   <div class="flex flex-col items-center mt-15">
+    <p class="text-red-400 text-sm bg-red-50 px-4 py-2 rounded-lg border border-red-100">
+      No se encontraron marcas
+    </p>
+  </div>
   }@else {
   <div class="flex-1">
-    <brands-table [brands]="brandsResource.value()?.content" (onDelete)="eliminarMarca($event)"></brands-table>
+
+    <!-- table desktop -->
+    <div class="hidden md:block">
+      <brands-table [brands]="brandsResource.value()?.content" (onDelete)="eliminarMarca($event)" />
+
+    </div>
+
+    <!-- table mobile -->
+    <div class="md:hidden">
+      <brands-table-mobile [brands]="brandsResource.value()?.content" (onDelete)="eliminarMarca($event)" />
+    </div>
   </div>
   }
 

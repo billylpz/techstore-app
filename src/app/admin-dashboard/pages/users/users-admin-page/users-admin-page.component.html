@@ -1,33 +1,59 @@
 <section class="">
-  <h1 class="text-4xl text-center my-10">Lista de Usuarios</h1>
-  <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Usuario</a>
+  <h1 class="text-4xl text-center my-10 font-bold">Lista de Usuarios</h1>
 
+  <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-15">
+    <div class="flex justify-center md:justify-start md:w-1/2 items-center">
+      <a type="button" routerLink="form"
+        class="bg-blue-600 hover:bg-blue-700 text-white w-full md:w-fit text-center px-6 py-2 rounded-md transition-colors">
+        Crear Usuario
+      </a>
+    </div>
+
+    <div class="flex flex-col md:flex-row justify-start  gap-3 w-full my-15">
+      <label for="search-by" class="text-gray-400">Buscar por nombre/apellido:</label>
+      <input type="text" id="search-by" class="border rounded-sm px-2" autofocus [formControl]="searchByInput">
+    </div>
+
+  </div>
+
+
+  @if (usersResource.value()?.totalElements!>0) {
   <div class="flex justify-center">
     <paginator [totalPages]="usersResource.value()?.totalPages" [currentPage]="usersResource.value()?.page" />
   </div>
-
-  <div class="flex justify-center items-center gap-3  my-5 ">
-    <label for="search-by" class="text-gray-400">Buscar por nombre/apellido:</label>
-    <input type="text" id="search-by" class="border rounded-sm px-2" autofocus [formControl]="searchByInput">
-  </div>
+  }
 
 
   @if (usersResource.isLoading()) {
-  <div class=" flex justify-center h-50 ">
-    <span class="loading loading-dots loading-xl "></span>
-  </div>
-
+  <loading-dots />
   } @else if (usersResource.value()?.content?.length==0) {
-  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron usuarios
-  </p>
+  <div class="flex flex-col items-center mt-15">
+    <p class="text-red-400 text-sm bg-red-50 px-4 py-2 rounded-lg border border-red-100">
+      No se encontraron usuarios
+    </p>
+  </div>
   }
 
   @else {
-  <users-table [users]="usersResource.value()?.content" (onDelete)="eliminarUser($event)"></users-table>
+  <div class="flex-1">
+
+    <!-- table desktop -->
+    <div class="hidden md:block">
+      <users-table [users]="usersResource.value()?.content" (onDelete)="eliminarUser($event)" />
+    </div>
+
+    <!-- table mobile -->
+    <div class="md:hidden">
+      <users-table-mobile [users]="usersResource.value()?.content" (onDelete)="eliminarUser($event)" />
+    </div>
+  </div>
 
   }
+
+  @if (usersResource.value()?.totalElements!>0) {
   <div class="flex justify-center">
     <paginator [totalPages]="usersResource.value()?.totalPages" [currentPage]="usersResource.value()?.page" />
   </div>
+  }
 
 </section>

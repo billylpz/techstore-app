@@ -1,19 +1,20 @@
-<div class="card bg-white w-70 shadow-sm z-10">
-  <a class=" cursor-pointer" [routerLink]="['/product-details',product()?.id]">
-    <figure class="px-10 pt-10">
+<div class="card bg-white w-40 h-100 shadow-sm z-10  flex flex-col 
+  md:h-115 md:w-70 ">
+  <a class=" cursor-pointer flex-1 block" [routerLink]="['/product-details',product()?.id]">
+    <figure class="px-5 md:px-10 pt-10">
       @if(product()?.images![0]){
         <img [src]="product()?.images![0].imageUrl" alt="" class="rounded-xl" />
       }@else{
         <img src="producto-sin-imagen.jpg" alt="" class="rounded-xl" /> 
       }
     </figure>
-    <div class="card-body items-center text-center">
-      <h2 class="card-title hover:text-blue-700 line-clamp-2">{{product()?.name}}</h2>
+    <div class="card-body px-5 items-center ">
+      <h2 class="text-sm card-title hover:text-blue-700 line-clamp-4 md:line-clamp-3">{{product()?.name}}</h2>
       <p class="text-xl text-blue-700 font-bold">S/. {{product()?.price | number:'1.2-2'}}</p>
     </div>
   </a>
-  <div class="card-body items-center">
-    <button type="button" class="btn btn-primary" (click)="onAddToCart(product()!)">Añadir al carrito</button>
+  <div class="card-body items-center text-sm p-1 ">
+    <button type="button" class="btn btn-primary text-sm md:text-lg" (click)="onAddToCart(product()!)">Añadir al carro</button>
   </div>
 </div>
 

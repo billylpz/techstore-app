@@ -1,9 +1,9 @@
 <section class="flex flex-col ">
   <h1 class="text-3xl text-center mb-10 ">Checkout</h1>
 
-  <div class="flex gap-5">
+  <div class="flex flex-col gap-5 md:flex-row">
     <!-- form -->
-    <section class="w-1/2  p-3">
+    <section class="w-full md:w-1/2  p-3">
       <form action="" [formGroup]="myForm" class="flex flex-col gap-5">
         <div class="flex gap-3">
           <div class="flex flex-col  items-start w-1/2">
@@ -78,8 +78,9 @@
 
     <!-- checkout info  -->
     @if(cartService.items().length==0){
-    <div
-      class="flex flex-col items-center justify-center w-1/2 py-20 bg-white border border-dashed border-gray-300 rounded-lg shadow-sm ">
+    <!-- empty orders -->
+    <div class="flex flex-col items-center justify-center w-full md:w-1/2 py-20 bg-white border border-dashed border-gray-300 
+      rounded-lg shadow-sm ">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-300 mb-4" fill="none" viewBox="0 0 24 24"
         stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -98,7 +99,9 @@
       </a>
     </div>
     }@else{
-    <section class="flex flex-col gap-5 w-1/2 bg-stone-50 p-5">
+
+    <!-- orden -->
+    <section class="flex flex-col gap-5 w-full md:w-1/2 bg-stone-50 p-5">
       <h1 class="font-semibold text-lg">Tu orden</h1>
       <div class="border border-gray-300">
         <section class="flex justify-between font-semibold text-sm p-3 border-b border-gray-300">
@@ -108,13 +111,18 @@
 
         @for (item of cartService.items() ; track item) {
         <section class="flex justify-between p-3 border-b border-gray-300">
-          <div class="flex gap-3 w-80">
-            <img [src]="item.product.images[0].imageUrl" alt="" class="size-20">
-            <p class="text-xs font-semibold">{{item.product.name}}</p>
-            <p class="text-xs font-semibold text-blue-600">x{{item.quantity}}</p>
+          <div class="flex gap-2 md:gap-3 w-80  ">
+            <div class="shrink-0">
+              <img [src]="item.product.images[0].imageUrl" alt="" class="size-20">
+              <p class="text-xs text-center font-semibold text-blue-600 "> S/{{item.product.price | number:'1.2-2'}}</p>
+            </div>
+            <p class="text-xs font-semibold ">{{item.product.name}}</p>
+            <p class="text-xs font-semibold text-blue-600 ">x{{item.quantity}}</p>
+
           </div>
 
-          <p class="text-sm font-semibold text-blue-600">S/. {{item.product.price * item.quantity | number:'1.2-2'}}</p>
+          <p class="pl-5 text-sm font-semibold text-blue-600">S/. {{item.product.price * item.quantity |
+            number:'1.2-2'}}</p>
         </section>
         }
 
@@ -131,8 +139,9 @@
           <div class="flex gap-5">
             <input type="checkbox" id="checkbox" class="cursor-pointer accent-blue-600"
               [formControl]="acceptTermsControl">
-            <label for="checkbox" class="text-xs cursor-pointer text-gray-700">
-              He leído y acepto los <a routerLink="/home" class="text-blue-600 underline">términos y condiciones</a> de TechStore *
+            <label for="checkbox" class="text-sm md:text-xs cursor-pointer text-gray-700">
+              He leído y acepto los <a routerLink="/home" class="text-blue-600 underline">términos y condiciones</a> de
+              TechStore *
             </label>
           </div>
 

@@ -1,10 +1,8 @@
 <div class="flex flex-col justify-center mt-10 gap-5">
-
-
   <table class="table-auto w-full  border-separate border-spacing-y-2 ">
     <thead>
       <tr class="text-left border-b border-gray-700 text-red-400">
-        <th class="px-4 py-2">ID</th>
+        <th class="px-4 py-2">PRODUCTO</th>
         <th class="px-4 py-2">NOMBRE</th>
         <th class="px-4 py-2 text-right">PRECIO</th>
         <th class="px-4 py-2 text-center">STOCK</th>
@@ -20,9 +18,15 @@
     <tbody>
       @for (product of products() ; track product.id) {
       <tr class="hover:bg-gray-800 transition-colors text-sm">
-        <td class="px-4 py-3 border-t border-gray-700">{{product.id}}</td>
+        <td class="px-4 py-3 border-t border-gray-700">
+          @if(product?.images![0]){
+          <img [src]="product?.images![0].imageUrl" alt="" class="size-30 rounded-xl" />
+          }@else{
+          <img src="producto-sin-imagen.jpg" alt="" class="size-30 rounded-xl" />
+          }
+        </td>
         <td class="px-4 py-3 border-t border-gray-700">{{product.name}}</td>
-        <td class="px-4 py-3 border-t border-gray-700 text-right">${{product.price}}</td>
+        <td class=" py-3 border-t border-gray-700 text-right">S/. {{product.price}}</td>
         <td class="px-4 py-3 border-t border-gray-700 text-center">{{product.stock}}</td>
         <td class="px-4 py-3 border-t border-gray-700 text-center">{{product.category?.name}}</td>
         <td class="px-4 py-3 border-t border-gray-700 text-center">{{product.brand?.name}}</td>
@@ -33,8 +37,9 @@
           <a class="bg-warning px-3 text-black rounded-sm  " [routerLink]="['form',product.id]">Editar</a>
         </td>
         <td class="px-4 py-3 border-t border-gray-700">
-          <button type="button" class=" px-3 text-black rounded-sm cursor-pointer border" [ngClass]="!product.active | activeStateColor"
-            (click)="eliminar(product)">{{product.active ? 'Deshabilitar':'Habilitar'}}</button>
+          <button type="button" class=" px-3 text-black rounded-sm cursor-pointer border"
+            [ngClass]="!product.active | activeStateColor" (click)="eliminar(product)">{{product.active ?
+            'Deshabilitar':'Habilitar'}}</button>
         </td>
       </tr>
       }

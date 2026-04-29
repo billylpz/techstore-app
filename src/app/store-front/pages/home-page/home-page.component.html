@@ -4,6 +4,8 @@
 
   }@else {
 
+    <!-- filter bar -->
+  @if(productsResource.value()?.totalElements!=0){
   <div class="flex gap-5 justify-end ">
     <div class="flex items-center gap-3">
       <label for="select" class="text-sm">Ordenar por:</label>
@@ -16,16 +18,18 @@
       </select>
     </div>
   </div>
+  }
 
 
+  <!-- paginator -->
   @if(productsResource.value()?.totalElements!=0){
   <div class="flex justify-center">
-    <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page">
-    </paginator>
+    <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page" />
   </div>
   }
 
-  <div class="grid grid-cols-4 gap-15 my-15  ">
+  <!-- results -->
+  <div class="grid grid-cols-2 gap-5 my-5 md:grid-cols-4 md:gap-15   ">
     @for (product of productsResource.value()?.content; track product.id) {
     <app-product-card [product]="product" />
     }@empty {
@@ -33,6 +37,7 @@
     }
   </div>
 
+  <!-- paginator -->
   @if(productsResource.value()?.totalElements!=0){
   <div class="flex justify-center">
     <paginator [totalPages]="productsResource.value()?.totalPages" [currentPage]="productsResource.value()?.page">

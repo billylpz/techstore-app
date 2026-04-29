@@ -1,17 +1,21 @@
-<nav class="flex px-15 py-5 gap-5 bg-blue-600 text-white text-lg justify-between items-center ">
-  <a class="text-4xl" routerLink="">TechStore</a>
+<nav class="flex px-5 py-5 gap-5 bg-blue-600 text-white text-lg justify-between items-center 
+  md:px-15">
+  <!-- left -->
+  <a class="text-xl md:text-4xl" routerLink="">TechStore</a>
 
-  <label class="input bg-white">
+  <!-- center -->
+  <label class="input bg-white w-40 md:w-100">
     <svg class="h-[1em] opacity-50 text-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none" stroke="currentColor">
         <circle cx="11" cy="11" r="8"></circle>
         <path d="m21 21-4.3-4.3"></path>
       </g>
     </svg>
-    <input type="search" required placeholder="Buscar" class="text-gray-500" [formControl]="searchBy" />
+    <input type="search" required placeholder="Buscar" class="text-gray-500 " [formControl]="searchBy" />
   </label>
 
-  <div class="flex gap-15 items-center">
+  <!-- rigth -->
+  <div class="flex flex-col-reverse  md:gap-15 items-center md:flex-row">
     <div class="flex items-center cursor-pointer" (click)="toggleCart()">
       <fa-icon [icon]="faCartShopping" />
       <span class="text-sm">({{cartService.items().length}})</span>
@@ -19,23 +23,25 @@
 
     @if (tokenService.getPayload()) {
 
-    <div class="flex items-center">
-      <span class="text-sm">Bienvenido: </span>
-      <ul class="menu menu-horizontal px-1">
-        <li>
-          <details>
-            <summary><span class=""> {{tokenService.getSubject()}}</span></summary>
-            <ul class="p-2 bg-white text-black w-30 z-1 -translate-x-1/2 text-xs">
-              <li><button (click)="onRedirectToProfile()">Editar mi perfil</button> </li>
-              <li><button [routerLink]="['/my-orders']">Mis compras</button> </li>
-              @if(tokenService.isAdmin()){
-              <li><a class="text-blue-600" routerLink="/admin/home">Ir al dashboard</a> </li>
-              }
-              <li><button type="button" (click)="logOut()">Cerrar sesión</button></li>
-            </ul>
-          </details>
-        </li>
-      </ul>
+    <div class="">
+      <div class="flex items-center ">
+        <span class="text-sm hidden md:block">Bienvenido: </span>
+        <ul class="menu menu-horizontal px-1">
+          <li>
+            <details>
+              <summary><span class=""> {{tokenService.getSubject()}}</span></summary>
+              <ul class="p-2 bg-white text-black w-35 z-1 -translate-x-1/2 text-sm">
+                <li><button (click)="onRedirectToProfile()">Mi perfil</button> </li>
+                <li><button [routerLink]="['/my-orders']">Mis compras</button> </li>
+                @if(tokenService.isAdmin()){
+                <li><a class="text-blue-600" routerLink="/admin/home">Ir al dashboard</a> </li>
+                }
+                <li><button type="button" (click)="logOut()">Cerrar sesión</button></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
     </div>
 
     } @else {
@@ -48,7 +54,7 @@
 
 <nav class="flex gap-15 bg-white text-black px-15 border border-blue-400">
   <select class="select text-blue-600 bg-white w-35 outline-none border-0 font-semibold" [formControl]="categorySelect">
-    <option [value]="''" selected disabled class="font-bold text-lg" >Categorias</option>
+    <option [value]="''" selected disabled class="font-bold text-lg">Categorias</option>
     <option [value]="''" class="text-black  bg-white shadow-none">--Todos--</option>
 
     @for (category of categoriesResource.value()?.content; track category.id) {
@@ -57,8 +63,7 @@
   </select>
 
 
-  <select class="select text-blue-800 bg-white w-35 outline-none border-0 font-semibold"
-     [formControl]="brandSelect">
+  <select class="select text-blue-600 bg-white w-35 outline-none border-0 font-semibold" [formControl]="brandSelect">
     <option [value]="''" selected disabled class="font-bold text-lg">Marcas</option>
     <option [value]="''" class="text-black  bg-white shadow-none">--Todos--</option>
 

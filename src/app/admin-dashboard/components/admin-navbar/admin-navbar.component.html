@@ -1,4 +1,4 @@
-<div class="navbar bg-base-100 shadow-sm px-10">
+<div class="navbar bg-base-100 shadow-sm md:px-10">
   <div class="navbar-start">
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
@@ -7,19 +7,19 @@
         </svg>
       </div>
       <!--mobile-->
-      <ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+      <ul tabindex="-1" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow ">
         <li>
           <a>Mantenimiento</a>
-          <ul class="p-2 bg-base-100 w-40 z-1">
-            <li><a routerLink="products">Productos</a></li>
-            <li><a routerLink="brands">Marcas</a></li>
-            <li><a routerLink="categories">Categorias</a></li>
-            <li><a routerLink="users">Usuarios</a></li>
+          <ul class="p-2 bg-base-100 w-40 z-1 ">
+            <li><a routerLink="products" class="text-sm">Productos</a></li>
+            <li><a routerLink="brands" class="text-sm">Marcas</a></li>
+            <li><a routerLink="categories" class="text-sm">Categorias</a></li>
+            <li><a routerLink="users" class="text-sm">Usuarios</a></li>
           </ul>
         </li>
       </ul>
     </div>
-    <a class="text-xl" routerLink="home">TechStore</a>
+    <a class="text-2xl" routerLink="home">TechStore</a>
   </div>
 
   <!-- desktop -->
@@ -43,13 +43,13 @@
   <div class="navbar-end flex">
 
     @if (tokenService.getPayload()) {
-    <span >Bienvenido: </span>
+    <span class="text-sm">Bienvenido: </span>
     <ul class="menu menu-horizontal px-1">
       <li>
         <details>
           <summary><span class="text-red-400"> {{tokenService.getSubject()}}</span></summary>
-          <ul class="p-2 bg-base-100 w-35 z-1 -translate-x-1/2 text-xs">
-            <li><a [routerLink]="['/admin/users/form',tokenService.getId()]">Editar mi perfil</a></li>
+          <ul class="p-2 bg-base-100 w-40 z-1 -translate-x-1/2 text-sm">
+            <li><a [routerLink]="['/admin/users/form',tokenService.getId()]">Mi perfil</a></li>
             <li><a class="text-blue-400" [routerLink]="['',tokenService.getId()]">Ir a página pública</a></li>
             <li><button type="button" (click)="logOut()">Cerrar sesión</button></li>
           </ul>

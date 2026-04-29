@@ -1,5 +1,19 @@
-<section class="">
-  <h1 class="text-4xl text-center my-10">Lista de Categorias</h1>
+<section class="flex flex-col flex-1">
+  <h1 class="text-4xl md:text-4xl text-center my-6 md:my-10 font-bold">Lista de Categorias</h1>
+
+
+
+  <div class="flex flex-col gap-10  justify-between md:flex-row md:gap-3 mt-15">
+    <div class="flex justify-center items-center md:justify-start  md:w-1/2">
+      <a type="button" routerLink="form"
+        class="bg-blue-600 hover:bg-blue-700 text-white w-full md:w-fit text-center px-6 py-2 rounded-md transition-colors">
+        Crear Categoria
+      </a>
+    </div>
+    <admin-filter-bar class="w-full" (searchByNameValueEmitter)="searchByNameResult.set($event)"
+      (filterSelectionEmitter)="filterSelection.set($event)">
+    </admin-filter-bar>
+  </div>
 
   @if (categoriesResource.value()?.totalElements!>0) {
   <div class="flex justify-center">
@@ -7,23 +21,31 @@
   </div>
   }
 
-  <div class="flex justify-between mt-10">
-    <a type="button" routerLink="form" class="bg-blue-600 w-fit px-3 py-1 rounded-sm">Crear Categoria</a>
-    <admin-filter-bar (searchByNameValueEmitter)="searchByNameResult.set($event)"
-      (filterSelectionEmitter)="filterSelection.set($event)">
-    </admin-filter-bar>
-  </div>
-
   @if (categoriesResource.isLoading()) {
-  <div class=" flex justify-center h-50 ">
-    <span class="loading loading-dots loading-xl "></span>
-  </div>
+  <loading-dots/>
   }@else if (categoriesResource.value()?.content?.length==0) {
-  <p class="  text-red-400 text-sm mt-15 flex justify-center">No se encontraron categorias</p>
+  <div class="flex flex-col items-center mt-10">
+    <p class="text-red-400 text-sm bg-red-50 px-4 py-2 rounded-lg border border-red-100">
+      No se encontraron categorias
+    </p>
+  </div>
   }
   @else {
-  <categories-table [categories]="categoriesResource.value()?.content"
-    (onDelete)="eliminarCategoria($event)"></categories-table>
+
+  <div class="flex-1">
+
+    <!-- table desktop -->
+    <div class="hidden md:block">
+      <categories-table [categories]="categoriesResource.value()?.content" (onDelete)="eliminarCategoria($event)" />
+    </div>
+
+    <!-- table mobile -->
+    <div class="md:hidden">
+      <categories-table-mobile [categories]="categoriesResource.value()?.content"
+        (onDelete)="eliminarCategoria($event)" />
+    </div>
+  </div>
+
   }
 
   @if (categoriesResource.value()?.totalElements!>0) {
