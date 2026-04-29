@@ -1,9 +1,10 @@
-import { Component, input, OnInit, output } from '@angular/core';
-import { Category } from '../interfaces/category.interface';
-import { ActiveStateColorPipe } from "../../shared/pipes/active-state-color.pipe";
-import { ActiveTextEntityPipe } from "../../shared/pipes/active-text-entity.pipe";
+import { Component, input,output } from '@angular/core';
+
 import { DatePipe, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ActiveStateColorPipe } from '../../../shared/pipes/active-state-color.pipe';
+import { ActiveTextEntityPipe } from '../../../shared/pipes/active-text-entity.pipe';
+import { Category } from '../../interfaces/category.interface';
 
 @Component({
   selector: 'categories-table',
