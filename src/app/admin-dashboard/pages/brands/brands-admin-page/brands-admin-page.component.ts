@@ -9,13 +9,15 @@ import { BrandService } from "../../../../brands/services/brand.service";
 import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
 import { PaginatorService } from "../../../../shared/components/paginator/paginator.service";
 import { AdminFilterBarComponent } from "../../../components/admin-filter-bar/admin-filter-bar.component";
+import { BrandsTableMobileComponent } from "../../../../brands/components/brands-table-mobile/brands-table-mobile.component";
+import { LoadingDotsComponent } from "../../../../shared/components/loading-dots/loading-dots.component";
 
 
 @Component({
   selector: 'app-brands-admin-page',
   templateUrl: './brands-admin-page.component.html',
   styleUrls: ['./brands-admin-page.component.css'],
-  imports: [PaginatorComponent, BrandsTableComponent, RouterLink, AdminFilterBarComponent]
+  imports: [PaginatorComponent, BrandsTableComponent, RouterLink, AdminFilterBarComponent, BrandsTableMobileComponent, LoadingDotsComponent]
 })
 export class BrandsAdminPageComponent {
   private destroyRef = inject(DestroyRef);
@@ -24,12 +26,9 @@ export class BrandsAdminPageComponent {
   searchByNameResult = signal<string>('');
   filterSelection = signal<string>('1');
 
-  effects = effect(() => {
-    const resource = this.brandsResource.value();
-    if (resource && resource.totalPages < this.paginatorService.currentPage()) {
-      this.paginatorService.reset();
-    }
-  });
+  currentPageGreaterThanResourcePagesEffect = effect(() => {
+    this.paginatorService.resetCurrentPageIfGreaterThanResourcePages(this.brandsResource.value()?.totalPages!)
+  })
 
   brandsResource = rxResource({
     params: () => ({

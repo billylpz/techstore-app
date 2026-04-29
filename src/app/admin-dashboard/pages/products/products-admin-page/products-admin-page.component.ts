@@ -11,13 +11,14 @@ import { LoadingDotsComponent } from "../../../../shared/components/loading-dots
 import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
 import { PaginatorService } from "../../../../shared/components/paginator/paginator.service";
 import { AdminFilterBarComponent } from "../../../components/admin-filter-bar/admin-filter-bar.component";
+import { ProductsTableMobileComponent } from "../../../../products/components/products-table-mobile/products-table-mobile.component";
 
 
 @Component({
-  selector: 'app-products-admin-page',
+  selector: 'products-admin-page',
   templateUrl: './products-admin-page.component.html',
   styleUrls: ['./products-admin-page.component.css'],
-  imports: [ProductsTableComponent, PaginatorComponent, RouterLink, ReactiveFormsModule, AdminFilterBarComponent, LoadingDotsComponent]
+  imports: [ProductsTableComponent, PaginatorComponent, RouterLink, ReactiveFormsModule, AdminFilterBarComponent, LoadingDotsComponent, ProductsTableMobileComponent]
 })
 export class ProductsAdminPageComponent {
   private destroyRef = inject(DestroyRef);
@@ -26,15 +27,9 @@ export class ProductsAdminPageComponent {
   searchByNameResult = signal<string>('');
   filterSelection = signal<string>('1');
 
-  effects = effect(() => {
-    const resource = this.productsResource.value();
-
-    //si el param page es mayor a las paginas del recurso, se reincia el param page a '1'
-    if (resource && resource.totalPages! < this.paginatorService.currentPage()) {
-      this.paginatorService.reset()
-    }
-  });
-
+  currentPageGreaterThanResourcePagesEffect = effect(() => {
+    this.paginatorService.resetCurrentPageIfGreaterThanResourcePages(this.productsResource.value()?.totalPages!)
+  })
 
   productsResource = rxResource({
     params: () => ({

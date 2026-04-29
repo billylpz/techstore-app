@@ -1,4 +1,4 @@
-import { Component, inject, DestroyRef, signal } from "@angular/core";
+import { Component, inject, DestroyRef, signal, effect } from "@angular/core";
 import { takeUntilDestroyed, rxResource } from "@angular/core/rxjs-interop";
 import { ReactiveFormsModule, FormControl } from "@angular/forms";
 import { RouterLink, Router, ActivatedRoute } from "@angular/router";
@@ -10,13 +10,15 @@ import { PaginatorService } from "../../../../shared/components/paginator/pagina
 import { UsersTableComponent } from "../../../../users/components/users-table/users-table.component";
 import { User } from "../../../../users/interfaces/user.interface";
 import { UserService } from "../../../../users/services/user.service";
+import { UsersTableMobileComponent } from "../../../../users/components/users-table-mobile/users-table-mobile.component";
+import { LoadingDotsComponent } from "../../../../shared/components/loading-dots/loading-dots.component";
 
 
 @Component({
   selector: 'app-users-admin-page',
   templateUrl: './users-admin-page.component.html',
   styleUrls: ['./users-admin-page.component.css'],
-  imports: [PaginatorComponent, UsersTableComponent, RouterLink, ReactiveFormsModule]
+  imports: [PaginatorComponent, UsersTableComponent, RouterLink, ReactiveFormsModule, UsersTableMobileComponent, LoadingDotsComponent]
 })
 export class UsersAdminPageComponent {
   private destroyRef = inject(DestroyRef);
@@ -44,6 +46,10 @@ export class UsersAdminPageComponent {
         });
       })
   };
+
+  currentPageGreaterThanResourcePagesEffect = effect(() => {
+    this.paginatorService.resetCurrentPageIfGreaterThanResourcePages(this.usersResource.value()?.totalPages!)
+  })
 
   usersResource = rxResource({
     params: () => ({ page: this.paginatorService.currentPage() - 1, term: this.searchByValue() }),

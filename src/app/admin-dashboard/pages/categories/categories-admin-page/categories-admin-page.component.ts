@@ -3,19 +3,21 @@ import { rxResource, takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { RouterLink } from "@angular/router";
 import { delay } from "rxjs";
 import Swal from "sweetalert2";
-import { CategoriesTableComponent } from "../../../../categories/categories-table/categories-table.component";
 import { Category } from "../../../../categories/interfaces/category.interface";
 import { CategoryService } from "../../../../categories/services/category.service";
 import { PaginatorComponent } from "../../../../shared/components/paginator/paginator.component";
 import { PaginatorService } from "../../../../shared/components/paginator/paginator.service";
 import { AdminFilterBarComponent } from "../../../components/admin-filter-bar/admin-filter-bar.component";
+import { CategoriesTableMobileComponent } from "../../../../categories/components/categories-table-mobile/categories-table-mobile.component";
+import { CategoriesTableComponent } from "../../../../categories/components/categories-table/categories-table.component";
+import { LoadingDotsComponent } from "../../../../shared/components/loading-dots/loading-dots.component";
 
 
 @Component({
   selector: 'app-categories-admin-page',
   templateUrl: './categories-admin-page.component.html',
   styleUrls: ['./categories-admin-page.component.css'],
-  imports: [CategoriesTableComponent, PaginatorComponent, RouterLink, AdminFilterBarComponent]
+  imports: [CategoriesTableComponent, PaginatorComponent, RouterLink, AdminFilterBarComponent, CategoriesTableMobileComponent, LoadingDotsComponent]
 })
 export class CategoriesAdminPageComponent {
   private destroyRef = inject(DestroyRef);
@@ -24,12 +26,9 @@ export class CategoriesAdminPageComponent {
   searchByNameResult = signal<string>('');
   filterSelection = signal<string>('1');
 
-  effects = effect(() => {
-    const resource = this.categoriesResource.value();
-    if (resource && resource.totalPages < this.paginatorService.currentPage()) {
-      this.paginatorService.reset();
-    }
-  });
+  currentPageGreaterThanResourcePagesEffect = effect(() => {
+    this.paginatorService.resetCurrentPageIfGreaterThanResourcePages(this.categoriesResource.value()?.totalPages!)
+  })
 
   categoriesResource = rxResource({
     params: () => ({

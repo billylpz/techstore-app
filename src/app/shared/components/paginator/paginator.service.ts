@@ -1,4 +1,5 @@
-import { inject, Injectable } from '@angular/core';
+import { PageResponse } from './../../interfaces/page-response.interface';
+import { inject, Injectable, WritableResource } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
@@ -18,6 +19,14 @@ export class PaginatorService {
       return (isNaN(pageNumber) || pageNumber <= 0) ? 1 : pageNumber;
     })
   ), { initialValue: 1 });
+
+
+  resetCurrentPageIfGreaterThanResourcePages(resourcePages:number) {
+    //si el param page es mayor a las paginas del recurso, se reincia el param page a '1'
+    if (resourcePages && resourcePages < this.currentPage()) {
+      this.reset()
+    }
+  }
 
 
   reset(): void {

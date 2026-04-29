@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { ProductCardComponent } from "../../../products/components/product-card/product-card.component";
 import { rxResource, takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { ProductService } from '../../../products/services/product.service';
@@ -8,12 +8,13 @@ import { LoadingDotsComponent } from "../../../shared/components/loading-dots/lo
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { PaginatorComponent } from "../../../shared/components/paginator/paginator.component";
 import { PaginatorService } from '../../../shared/components/paginator/paginator.service';
+import { NoResultsMessageComponent } from "../../../shared/components/no-results-message/no-results-message.component";
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],
-  imports: [ProductCardComponent, LoadingDotsComponent, ReactiveFormsModule, PaginatorComponent]
+  imports: [ProductCardComponent, LoadingDotsComponent, ReactiveFormsModule, PaginatorComponent, NoResultsMessageComponent]
 })
 export class HomePageComponent {
   private destoryRef = inject(DestroyRef);
@@ -55,6 +56,10 @@ export class HomePageComponent {
     let brandId = param.get('brandId');
     return brandId != null ? brandId : '';
   })));
+
+  currentPageGreaterThanResourcePagesEffect = effect(() => {
+    this.paginatorService.resetCurrentPageIfGreaterThanResourcePages(this.productsResource.value()?.totalPages!)
+  })
 
 
   productsResource = rxResource({
