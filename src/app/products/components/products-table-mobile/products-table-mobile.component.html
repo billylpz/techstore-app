@@ -1,0 +1,54 @@
+<div class="flex flex-col gap-15">
+
+  @for (product of products() ; track product.id) {
+  <div class="flex flex-col gap-5 bg-slate-800  border border-slate-500 rounded-xl p-4 shadow-sm">
+    <section class="flex justify-between items-start mb-3">
+      <span class="text-xs font-mono text-slate-400">ID: {{product.id}}</span>
+      <span [class]="product.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+        class="text-[10px] uppercase font-bold px-2 py-1 rounded-full">
+        {{product.active ? 'Habilitado' : 'Deshabilitado'}}
+      </span>
+    </section>
+
+    <section class="flex justify-center">
+      @if(product?.images![0]){
+      <img [src]="product?.images![0].imageUrl" alt="" class="size-30 rounded-xl" />
+      }@else{
+      <img src="producto-sin-imagen.jpg" alt="" class="size-30 rounded-xl" />
+      }
+    </section>
+
+    <h3 class="font-semibold text-white text-sm mb-1 leading-tight">{{product.name}}</h3>
+
+    <section class="grid grid-cols-2 gap-y-2 mt-4 text-sm border-t pt-3 border-slate-50">
+      <div>
+        <p class="text-slate-400">Precio</p>
+        <p class="font-bold text-blue-600 ">S/. {{product.price | number:'1.2-2'}}</p>
+      </div>
+      <div>
+        <p class="text-slate-400">Stock</p>
+        <p class="font-medium text-white">{{product.stock}} und.</p>
+      </div>
+      <div>
+        <p class="text-slate-400">Categoría</p>
+        <p class="truncate text-white">{{product.category?.name}}</p>
+      </div>
+      <div>
+        <p class="text-slate-400">Marca</p>
+        <p class="truncate text-white">{{product.brand?.name}}</p>
+      </div>
+    </section>
+
+    <section class="flex gap-2 mt-5">
+      <a [routerLink]="['form', product.id]"
+        class="flex-1 bg-amber-400 text-amber-900 text-center py-2 rounded-lg font-bold text-sm">
+        Editar
+      </a>
+      <button (click)="eliminar(product)" class="flex-1 border  py-2 rounded-lg font-bold text-sm"
+        [ngClass]="!product.active | activeStateColor">
+        {{product.active ? 'Deshabilitar':'Habilitar'}}
+      </button>
+    </section>
+  </div>
+  }
+</div>

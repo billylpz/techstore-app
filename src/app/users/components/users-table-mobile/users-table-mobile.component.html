@@ -1,0 +1,51 @@
+<div class="flex flex-col gap-15">
+
+  @for (user of users() ; track user.id) {
+  <div class="flex flex-col gap-5 bg-slate-800  border border-slate-500 rounded-xl p-4 shadow-sm">
+    <section class="flex justify-between items-start mb-3">
+      <span class="text-xs font-mono text-slate-400">ID: {{user.id}}</span>
+      <span [class]="user.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+        class="text-[10px] uppercase font-bold px-2 py-1 rounded-full">
+        {{user.active ? 'Habilitado' : 'Deshabilitado'}}
+      </span>
+    </section>
+
+    <h3 class="font-semibold text-white text-2xl text-center mb-1 leading-tight">{{user.name}}</h3>
+
+    <section class="grid grid-cols-2 gap-y-2 mt-4 text-sm border-t pt-3 border-slate-50">
+      <div>
+        <p class="text-slate-400">Nombre</p>
+        <p class="font-bold text-blue-600 "> {{user.name }}</p>
+      </div>
+      <div>
+        <p class="text-slate-400">Apellido</p>
+        <p class="font-medium text-white">{{user.lastname}} </p>
+      </div>
+      <div>
+        <p class="text-slate-400">Username</p>
+        <p class="truncate text-white">{{user.username}}</p>
+      </div>
+      <div>
+        <p class="text-slate-400">Email</p>
+        <p class="truncate text-white">{{user.email}}</p>
+      </div>
+      
+      <div>
+        <p class="text-slate-400">Fecha creación</p>
+        <p class="truncate text-white">{{user.createdAt | date}}</p>
+      </div>
+    </section>
+
+    <section class="flex gap-2 mt-5">
+      <a [routerLink]="['form', user.id]"
+        class="flex-1 bg-amber-400 text-amber-900 text-center py-2 rounded-lg font-bold text-sm">
+        Editar
+      </a>
+      <button (click)="eliminar(user)" class="flex-1 border  py-2 rounded-lg font-bold text-sm"
+        [ngClass]="!user.active | activeStateColor">
+        {{user.active ? 'Deshabilitar':'Habilitar'}}
+      </button>
+    </section>
+  </div>
+  }
+</div>
