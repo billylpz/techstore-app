@@ -42,7 +42,7 @@ export class HomePageComponent {
     })
   }
 
-  private searchByNameResult = toSignal(this.route.queryParamMap.pipe(map(param => {
+   searchByNameResult = toSignal(this.route.queryParamMap.pipe(map(param => {
     let name = param.get('name');
     return name != null ? name : '';
   })));

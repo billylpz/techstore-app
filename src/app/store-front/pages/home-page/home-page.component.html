@@ -4,7 +4,7 @@
 
   }@else {
 
-    <!-- filter bar -->
+  <!-- filter bar -->
   @if(productsResource.value()?.totalElements!=0){
   <div class="flex gap-5 justify-end ">
     <div class="flex items-center gap-3">
@@ -32,10 +32,13 @@
   <div class="grid grid-cols-2 gap-5 my-5 md:grid-cols-4 md:gap-15   ">
     @for (product of productsResource.value()?.content; track product.id) {
     <app-product-card [product]="product" />
-    }@empty {
-    <p>No se encontraron resultados...</p>
     }
   </div>
+
+  <!-- no results -->
+  @if(productsResource.value()?.totalElements==0){
+  <no-results-message [search]="searchByNameResult()"/>
+  }
 
   <!-- paginator -->
   @if(productsResource.value()?.totalElements!=0){
