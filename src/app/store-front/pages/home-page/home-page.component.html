@@ -31,7 +31,7 @@
   <!-- results -->
   <div class="grid grid-cols-2 gap-5 my-5 md:grid-cols-4 md:gap-15   ">
     @for (product of productsResource.value()?.content; track product.id) {
-    <app-product-card [product]="product" />
+    <product-card [product]="product" />
     }
   </div>
 

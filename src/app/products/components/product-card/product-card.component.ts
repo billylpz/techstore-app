@@ -6,7 +6,7 @@ import { DecimalPipe } from '@angular/common';
 import { CartToastComponent } from "../../../cart/components/cart-toast/cart-toast.component";
 
 @Component({
-  selector: 'app-product-card',
+  selector: 'product-card',
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css'],
   imports: [RouterLink, DecimalPipe, CartToastComponent]
