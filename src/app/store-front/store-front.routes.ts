@@ -7,6 +7,7 @@ import { ChangePasswordPageComponent } from './pages/change-password-page/change
 import { CheckoutPageComponent } from './pages/checkout-page/checkout-page.component';
 import { MyOrdersPageComponent } from './pages/my-orders-page/my-orders-page.component';
 import { storeGuard } from './guards/store.guard';
+import { TermsAndConditionsPageComponent } from './pages/terms-and-conditions-page/terms-and-conditions-page.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,9 @@ const routes: Routes = [
       {
         path: 'my-orders', component: MyOrdersPageComponent, title: 'Mis Pedidos | TechStore',
         canActivate: [storeGuard]
+      },
+      {
+        path: 'terms', component: TermsAndConditionsPageComponent, title: 'Términos y condiciones | TechStore',
       },
       { path: '**', redirectTo: 'home' },
     ]
