@@ -114,25 +114,31 @@ export class ProductDetailsPageComponent implements OnInit {
 
   /*## Metodos para el zoom de la foto principal del producto ##*/
   onMouseMove(e: MouseEvent) {
-    const container = e.currentTarget as HTMLElement;
-    const img = this.zoomImage()!.nativeElement;
 
-    // Obtenemos las dimensiones y posición del contenedor
-    const { left, top, width, height } = container.getBoundingClientRect();
+    if (this.selectedImage()) {
+      const container = e.currentTarget as HTMLElement;
+      const img = this.zoomImage()!.nativeElement;
 
-    // Calculamos la posición del mouse relativa al contenedor en porcentaje
-    const x = ((e.pageX - left) / width) * 100;
-    const y = ((e.pageY - top) / height) * 100;
+      // Obtenemos las dimensiones y posición del contenedor
+      const { left, top, width, height } = container.getBoundingClientRect();
 
-    // Aplicamos el origen de la transformación y el escalado
-    img.style.transformOrigin = `${x}% ${y}%`;
-    img.style.transform = 'scale(2.5)';
+      // Calculamos la posición del mouse relativa al contenedor en porcentaje
+      const x = ((e.pageX - left) / width) * 100;
+      const y = ((e.pageY - top) / height) * 100;
+
+      // Aplicamos el origen de la transformación y el escalado
+      img.style.transformOrigin = `${x}% ${y}%`;
+      img.style.transform = 'scale(2.5)';
+    }
+
   }
 
   onMouseLeave() {
-    const img = this.zoomImage()!.nativeElement;
-    img.style.transformOrigin = 'center';
-    img.style.transform = 'scale(1)';
+    if (this.selectedImage()) {
+      const img = this.zoomImage()!.nativeElement;
+      img.style.transformOrigin = 'center';
+      img.style.transform = 'scale(1)';
+    }
   }
   /** #### */
 
