@@ -17,7 +17,11 @@
     @for (item of cartItems(); track item.product.id) {
     <div class="flex gap-4 border-b pb-4">
       <a [routerLink]="['product-details',item.product.id]">
-        <img [src]="item.product.images![0].imageUrl" class="w-20 h-20 object-cover rounded">
+        @if(item.product.images[0]){ 
+          <img [src]="item.product.images![0].imageUrl" [alt]="item.product.name" class="w-20 h-20 object-cover rounded">
+        }@else {
+           <img src="producto-sin-imagen.jpg" alt="producto-sin-image" class="w-20 h-20 object-cover rounded" /> 
+        }
       </a>
       <div class="flex-1">
         <p class="font-semibold line-clamp-2">{{item.product.name}}</p>
