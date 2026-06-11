@@ -1,0 +1,12 @@
+services:
+  tech-store-app:
+    build: .
+    container_name: tech-store-app
+    ports:
+      - "4200:80"
+    networks:
+      - mi-red
+
+networks:
+  mi-red:
+    external: true
