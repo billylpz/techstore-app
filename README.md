@@ -1,59 +1,120 @@
-# TechStoreApp
+# 💻 TechStore Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.1.
+Aplicación web desarrollada con **Angular 20** que simula una tienda de tecnología (PCs, Laptops, Componentes) que consume la [TechStore API](https://github.com/billylpz/techstore-api) para gestionar productos, usuarios y órdenes en tiempo real.
 
-## Development server
 
-To start a local development server, run:
+# ⚠️ IMPORTANTE
+- Este es un **proyecto personal y de portafolio** desarrollado con fines educativos para demostrar habilidades en el desarrollo de una Single Page Application (SPA) robusta con Angular. **No está diseñado ni optimizado para su uso en entornos de producción empresarial.**
 
+- Esta Aplicación Angular ha sido diseñada y optimizada específicamente para actuar como el motor frontend de una aplicación backend (API REST) desarrollada en **Spring Boot** la cual debes descargar o clonar desde (https://github.com/billylpz/techstore-api.git). 
+
+## 🚀 Tecnologías
+
+- 🅰️ Angular v20.0.1
+- ⚡ Angular Signals
+- 📘 TypeScript
+- 🔄 RxJS
+- 🎨 Tailwind CSS
+- 🌼 DaisyUI
+- ⭐ Font Awesome
+- 🔐 JWT Decode
+- 🌐 Consumo de API REST
+- 📝 Reactive Forms
+
+
+## 🧠 Conceptos aplicados
+
+- **Arquitectura Basada en Servicio**
+  - Separación clara de la lógica de negocio y consumo de APIs.
+
+- **Seguridad**
+  - Autenticación y autorización basada en roles con JWT.
+
+- **Validación de Datos**
+  - Uso de Reactive Forms y Validators de Angular para validación de formularios en tiempo real.
+
+- **Estado Reactivo**
+  - Uso de Signals para una detección de cambios eficiente y moderna.
+
+- **Componentes Standalone**
+  - Estructura modular sin necesidad de NgModules.
+
+- **Contenerización**
+  - Docker + multi-stage builds
+
+- **UI/UX Adaptable**
+  - Diseño responsive con soporte nativo para diferentes dispositivos.
+
+
+## ✨ Funcionalidades
+
+- 🔐 **Autenticación y Autorización**
+  - Registro e inicio de sesión de usuarios mediante JWT, con control de acceso basado en roles (Administrador y Cliente).
+
+- 📦 **Gestión de Inventario (Admin)**
+  - Dashboard para crear, actualizar y eliminar productos, categorías, marcas y usuarios.
+  - Búsqueda y filtrado avanzado:
+    - Usuarios por nombre o apellido.
+    - Marcas, categorías y productos por nombre y estado.
+
+- 🖼️ **Gestión Multimedia**
+  - Subida y eliminación de imágenes para productos integrada con Cloudinary (vía Backend).
+
+- 🛒 **Experiencia de Compra**
+  - Visualización de productos con filtros por categoría, marca y precio.
+  - Carro de compras intituivo para el usuario.
+
+- 📊 **Paginación Dinámica**
+  - Navegación eficiente de los productos.
+
+- 🧾 **Sistema de Órdenes**
+  - Procesamiento eficaz de validación para generar compras.
+
+- 📄 **Comprobantes**
+  - Descarga de boletas de compra en formato PDF con detalles de la transacción.
+
+
+# 🖥️ Configuración y Ejecución
+
+Descarga o clona el proyecto desde (https://github.com/billylpz/techstore-app.git)
+
+## ⚠️ IMPORTANTE
+Este proyecto requiere que la [TechStore API](https://github.com/billylpz/techstore-api) esté en ejecución para funcionar correctamente, ya sea en local o en docker.
+
+
+## ▶️ Ejecución en Local:
+### ✔️ Requisitos
+- **NodeJS:** v22.16.0
+- **Angular CLI:** v20.0.1
+
+## 🖥️ Ejecutar proyecto
+Ejecutar en la terminal los siguientes comandos en la ruta donde hayas descargado el proyecto:
+
+📌 **Para instalar el paquete node_modules:**
 ```bash
-ng serve
+npm install 
+```
+📌 **Para ejecutar la aplicación:**
+```bash
+ng serve -o
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🐳 Ejecución con Docker :
+### ✔️ Requisitos
+- Docker Desktop
+- Crear imagen docker
 
-## Code scaffolding
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🐳 Construcción de Imagen Docker
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Ejecutar el siguiente comando desde la raíz del proyecto para crear y ejecutar el contenedor docker:
 
 ```bash
-ng generate --help
+docker-compose up --build
 ```
 
-## Building
+- Una vez creado el contenedor deber ingresar a http://localhost:4200 en tu navegador.
 
-To build the project run:
 
-```bash
-ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Desarrollado por [Billy López](https://github.com/billylpz)
